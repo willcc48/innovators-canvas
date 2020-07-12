@@ -1,0 +1,117 @@
+.canvas {
+	width:60vw;
+    display: flex;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+}
+
+.canvas__top {
+    width:75vw;
+    height: 20vh;
+    display: flex;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: row;
+}
+
+.canvas__middle {
+    height: 50vh;
+	width:75vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.canvas__bottom {
+    height: 20vh;
+	width:75vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.minor {
+    width: 90%;
+}
+
+.block__middle {
+    width: 25vw;
+    height: 20vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.col__long {
+    width: 15vw;
+    height: 50vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.col__short {
+    width: 15vw;
+    height: 25vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.col__short__short {
+    width: 15vw;
+    height: 20vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.row__short {
+    width: 30vw;
+    height: 20vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.row__long {
+    width: 100vw;
+    height: 20vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.handle {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    height: 2.25vh;
+    width: 5vw;
+    font-size: 1.25vh;
+    color: lightgray;
+}
+
+.handle:hover {
+    background-color: lightgray;
+    cursor: grab;
+    z-index: 0;
+}
+
+.handle:active {
+    cursor: grabbing;
+    background-color: lightslategrey;
+    color: lightslategray;
+}
+
+.loader {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    visibility: hidden;
+  }
