@@ -3,11 +3,12 @@ import axios from 'axios';
 import ResponsiveNavigation from '../components/ResponsiveNavigation';
 import '../styling/canvas.css';
 import Draggable from 'react-draggable';
+import Modal from 'react-awesome-modal';
+import { Menu, Item, MenuProvider, animation } from 'react-contexify';
+import 'react-contexify/dist/ReactContexify.min.css';
 
 import CKEditor from '@ckeditor/ckeditor5-react';
-
-
-import BalloonEditor from 'ckeditor5-wills-build/build/ckeditor';
+import BalloonEditor from 'custom-williams-block-build/build/ckeditor';
 
 var Spinner = require('react-spinkit');
 
@@ -37,7 +38,15 @@ class Canvas extends Component {
             loggedIn: true,
 
             loaderVisibility: 'hidden',
-            data: ''
+            
+            visible : false,
+
+            imgDrags: [],
+            imgList: ["https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
+            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
+            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
+            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
+            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0"]
         }
 
         this.infoTimer = null;
@@ -50,20 +59,40 @@ class Canvas extends Component {
                 '|',
                 'bold',
                 'italic',
-                'link',
                 'bulletedList',
                 'numberedList',
+                '|',
+                'fontSize',
+                'fontFamily',
+                '|',
                 'imageUpload',
-                'mediaEmbed' ,
-                'blockQuote',
+                'link',
+                '|',
                 'undo',
                 'redo',
-                ],
+            ],
             simpleUpload: {
-                uploadUrl: "http://localhost:9000/img_upload",
-                withCredentials: true
+                uploadUrl: 'http://localhost:9000/img_upload',
+                withCredentials: true,
             }
         };
+
+        this.img1Ref = React.createRef();
+        this.img2Ref = React.createRef();
+        this.img3Ref = React.createRef();
+        this.img4Ref = React.createRef();
+        this.img5Ref = React.createRef();
+
+
+        const onImageClick = ({ event, props }) => this.openModal();
+        const onGifClick = ({ event, props }) => this.openModal();
+        // create your menu first
+        this.MyAwesomeMenu = () => (
+            <Menu id='menu_id' animation={animation.fade}>
+            <Item onClick={onImageClick}>Add Image</Item>
+            <Item onClick={onGifClick}>Add Gif</Item>
+            </Menu>
+        );
     }
 
     componentDidMount() {
@@ -151,15 +180,16 @@ class Canvas extends Component {
     getTextCard(text, id) {
         return (
             <Draggable
+                bounds={{right: '10%', left: 0, top: 0, bottom: 500}}
                 axis='both'
                 handle=".handle"
-                defaultPosition={{x: 9, y: 0}}
+                defaultPosition={{x: 0, y: 0}}
                 onStart={this.handleStart}
                 onDrag={this.handleDrag}
                 onStop={this.handleStop}
                 >
                     <div className='minor'>
-                    <div className="handle">drag</div>
+                    <div className="handle" style={{zIndex: 0}}></div>
 
                     <CKEditor
                         editor={ BalloonEditor }
@@ -187,6 +217,17 @@ class Canvas extends Component {
         )
     }
     
+    openModal() {
+        this.setState({
+            visible : true
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            visible : false
+        });
+    }
 
     setInfoTimer() {
         if(this.infoTimer != null) {
@@ -198,13 +239,13 @@ class Canvas extends Component {
     updateInfo() {
         this.setloaderVisibility('visible');
 
-        console.log('updating info...');
-
         var userData = {stress: this.state.stress, strengths: this.state.strengths, behaviors: this.state.behaviors, energy: this.state.energy,
                         experience_bias: this.state.experience_bias, voice: this.state.voice, values: this.state.values, fixed_mindset: this.state.fixed_mindset,
                         growth_mindset: this.state.growth_mindset, vision: this.state.vision, purpose: this.state.purpose,
                         deliberate_practices: this.state.deliberate_practices};
         
+        console.log(userData);
+
         var xhr = new window.XMLHttpRequest();
         xhr.open('POST', 'http://localhost:9000/canvas_data', true);
         xhr.withCredentials = true;
@@ -213,7 +254,6 @@ class Canvas extends Component {
             if(xhr.readyState === XMLHttpRequest.DONE) {
                 var status = xhr.status;
                 if (status === 0 || (status >= 200 && status < 400)) {
-                    console.log('success updating!');
                     this.setloaderVisibility('hidden');
                 } else {
                     console.log('request failed '+status);
@@ -224,6 +264,51 @@ class Canvas extends Component {
         xhr.send(JSON.stringify(userData));
     }
 
+    getImgDragComp(i) {
+        return (
+            <Draggable
+                axis='both'
+                handle=".img__handle"
+                defaultPosition={{x: 9, y: 0}}
+                onStart={this.handleStart}
+                onDrag={this.handleDrag}
+                onStop={this.handleStop}
+            >
+                <div style={{ position: 'absolute', zIndex: 400}}>
+                    <div className='img__minor'>
+                    <div className="img__handle"></div>
+
+                        <button className="image" style={{resize: "both", backgroundImage: 'url('+this.state.imgList[i]+')'}}/>
+
+                    </div>
+                </div>
+            </Draggable>
+        )
+    }
+
+    addImgDrag(button) {
+        console.log(button.id);
+        switch(button.id) {
+            case 'img1':
+                this.state.imgDrags.push(this.getImgDragComp(0));
+                break;
+            case 'img2':
+                this.state.imgDrags.push(this.getImgDragComp(1));
+                break;
+            case 'img3':
+                this.state.imgDrags.push(this.getImgDragComp(2));
+                break;
+            case 'img4':
+                this.state.imgDrags.push(this.getImgDragComp(3));
+                break;
+            case 'img5':
+                this.state.imgDrags.push(this.getImgDragComp(4));
+                break;
+            default:
+                break;
+        }
+    }
+
     render () {
         return (
             <div>
@@ -232,111 +317,130 @@ class Canvas extends Component {
 
                 <br/>
 
-                <Draggable
-                    axis='both'
-                    handle=".handle"
-                    defaultPosition={{x: 9, y: 0}}
-                    onStart={this.handleStart}
-                    onDrag={this.handleDrag}
-                    onStop={this.handleStop}
-                >
-                    <div className='minor'>
-                    <div className="handle" style={{zIndex: 100}}>drag</div>
-
-                        <img src=''/>
-
+                <Modal visible={this.state.visible} width="800" height="500" onClickAway={() => this.closeModal()}>
+                    <div>
+                        <h1>Search for an Image</h1>
+                        <p>Just click on an image to add it to your canvas.</p>
+                        <button onClick={() => this.closeModal()}>Close</button>
+                        
                     </div>
-                </Draggable>
+                    <br/><br/>
 
-                <div className='canvas'>
-
-                    <div className='canvas__top'>
-
-                        <div className='row__long'>
-                            {this.getTextCard(this.state.vision, 'vision')}
+                    <div className="grid" id="grid">
+                        <div>
+                            <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
+                                <div ref={this.img1Ref} className="image"><button id="img1" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <br/>
+                                <div ref={this.img2Ref} className="image"><button id="img2" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <br/>
+                                <div ref={this.img3Ref} className="image"><button id="img3" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
+                            </div>
+                            <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
+                                <div ref={this.img4Ref} className="image"><button id="img4" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <br/>
+                                <div ref={this.img5Ref} className="image"><button id="img5" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
+                            </div>
                         </div>
+                    </div>
+                </Modal>
+
+                    <div className='canvas'>
+
+                    <MenuProvider id="menu_id" style={{position: "relative"}} >
+
+                        <this.MyAwesomeMenu />
+
+                        { this.state.imgDrags.map((img, index) => <div key={index}>{img}</div>) }
+
+                        <div className='canvas__top'>
+
+                            <div className='row__long' >
+                                {this.getTextCard(this.state.vision, 'vision')}
+                            </div>
+
+                        </div>
+                        
+                        <div className='canvas__middle'>
+
+                            <div className='col__first'>
+
+                                <div className='col__short' style={{borderRight: 0, borderBottom: 0, borderTop: 0}}>
+                                    {this.getTextCard(this.state.stress, 'stress')} 
+                                </div>
+
+                                <div className='col__short' style={{borderRight: 0, borderBottom: 0}}>
+                                    {this.getTextCard(this.state.behaviors, 'behaviors')} 
+                                </div>
+
+                            </div>
+
+                            <div className='col__second'>
+                                
+                                <div className='col__long' style={{borderTop: 0, borderBottom: 0}}>
+                                    {this.getTextCard(this.state.experience_bias, 'experience_bias')}
+                                </div>
+
+                            </div>
+
+                            <div className='col__third'>
+
+                                <div className='col__short' style={{borderRight: 0, borderLeft: 0, borderTop: 0}}>
+                                    {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')} 
+                                </div>
+
+                                <div className='col__short' style={{borderLeft: 0, borderTop: 0, borderRight: 0, borderBottom: 0}}>
+                                    {this.getTextCard(this.state.purpose, 'purpose')} 
+                                </div>
+
+                            </div>
+
+                            <div className='col__fourth'>
+
+                                <div className='col__long' style={{borderRight: 0, borderTop: 0, borderBottom: 0}}>
+                                    {this.getTextCard(this.state.voice, 'voice')}
+                                </div>
+
+                            </div>
+
+                            <div className='col__fifth'>
+
+                                <div className='col__short' style={{borderBottom: 0, borderTop: 0}}>
+                                    {this.getTextCard(this.state.strengths, 'strengths')} 
+                                </div>
+
+                                <div className='col__short' style={{borderBottom: 0}}>
+                                    {this.getTextCard(this.state.energy, 'energy')} 
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div className='canvas__bottom'>
+
+                            <div className='row__short'>
+                                {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
+                            </div>
+
+                            <div className='col__short__short' style={{borderRight: 0, borderLeft: 0}}>
+                                {this.getTextCard(this.state.values, 'values')} 
+                            </div>
+
+                            <div className='row__short'>
+                                {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
+                            </div>
+
+                        </div>
+
+                        <br/>
+
+                        <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
+
+                        </MenuProvider>
 
                     </div>
                     
-                    <div className='canvas__middle'>
-
-                        <div className='col__first'>
-
-                            <div className='col__short' style={{borderRight: 0, borderBottom: 0, borderTop: 0}}>
-                                {this.getTextCard(this.state.stress, 'stress')} 
-                            </div>
-
-                            <div className='col__short' style={{borderRight: 0, borderBottom: 0}}>
-                                {this.getTextCard(this.state.behaviors, 'behaviors')} 
-                            </div>
-
-                        </div>
-
-                        <div className='col__second'>
-                            
-                            <div className='col__long' style={{borderTop: 0, borderBottom: 0}}>
-                                {this.getTextCard(this.state.experience_bias, 'experience_bias')}
-                            </div>
-
-                        </div>
-
-                        <div className='col__third'>
-
-                            <div className='col__short' style={{borderRight: 0, borderLeft: 0, borderTop: 0}}>
-                                {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')} 
-                            </div>
-
-                            <div className='col__short' style={{borderLeft: 0, borderTop: 0, borderRight: 0, borderBottom: 0}}>
-                                {this.getTextCard(this.state.purpose, 'purpose')} 
-                            </div>
-
-                        </div>
-
-                        <div className='col__fourth'>
-
-                            <div className='col__long' style={{borderRight: 0, borderTop: 0, borderBottom: 0}}>
-                                {this.getTextCard(this.state.voice, 'voice')}
-                            </div>
-
-                        </div>
-
-                        <div className='col__fifth'>
-
-                            <div className='col__short' style={{borderBottom: 0, borderTop: 0}}>
-                                {this.getTextCard(this.state.strengths, 'strengths')} 
-                            </div>
-
-                            <div className='col__short' style={{borderBottom: 0}}>
-                                {this.getTextCard(this.state.energy, 'energy')} 
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div className='canvas__bottom'>
-
-                        <div className='row__short'>
-                            {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
-                        </div>
-
-                        <div className='col__short__short' style={{borderRight: 0, borderLeft: 0}}>
-                            {this.getTextCard(this.state.values, 'values')} 
-                        </div>
-
-                        <div className='row__short'>
-                            {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
-                        </div>
-
-                    </div>
-
                     <br/>
-
-                    <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
-
-                </div>
-                
-                <br/>
 
             </div>
         )

@@ -32,11 +32,19 @@ class Login extends Component {
     getLogoutText() {
         if(this.state.logoutSuccess) {
             return (
-                <div>You will be redirected to logout.</div>
+                <div>
+                    <br/><br/>
+                    <div>You will be redirected to logout.</div>
+                </div>
             )
         } else {
             return (
-                <div>You are not logged in!</div>
+                <div>
+                    <ResponsiveNavigation loggedIn={!this.state.logoutSuccess}/>
+                    <br/><br/>
+                    <div>You are not logged in!</div>
+                </div>
+                
             )
         }
     }
@@ -44,8 +52,6 @@ class Login extends Component {
     render () {
         return (
             <div>
-                <ResponsiveNavigation loggedIn={!this.state.logoutSuccess}/>
-                <br/><br/>
                 {this.getLogoutText()}
             </div>
         )

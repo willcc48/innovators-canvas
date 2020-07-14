@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ResponsiveNavigation from '../components/ResponsiveNavigation';
 
 class Login extends Component {
 
@@ -28,7 +27,6 @@ class Login extends Component {
     render () {
         return (
             <div>
-                <ResponsiveNavigation loggedIn='false'/>
                 <br/><br/>
                 {this.getLoginText()}
             </div>

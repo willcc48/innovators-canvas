@@ -14,6 +14,19 @@ var open = require('open');
 var cors = require('cors');
 const multer = require('multer');
 
+const multerStorage = multer.memoryStorage();
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, '/uploads/');
+    },
+
+    // By default, multer removes file extensions so let's add them back
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
 require('dotenv').config();
 
 var login_url = 'https://oauth.oit.duke.edu/oauth/authorize.php?response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A9000&client_id=innovators-canvas&scope=basic&state=1129&client_secret=2nA!QE=qgr73rUlKgvkjX!k4foCg!W#4KP*co4tSVgYVxHz*qd';
@@ -59,17 +72,6 @@ const userSchema = new mongoose.Schema({ netid: String, firstName: String, lastN
 const User = mongoose.model('User', userSchema);
 
 app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: {maxAge: 1000 * 60 * 60 * 24 * 7}}));
-
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads/');
-    },
-
-    // By default, multer removes file extensions so let's add them back
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
@@ -205,10 +207,44 @@ app.post('/canvas_data', async function(req, res) {
     return saved_res.end();
 });
 
-/* POST img data. */
-app.post('/img_upload', async function(req, res) {
-    return res.JSON({updloaded: true, url: 'http://localhost:9000/'});
-});
+const imageFilter = function(req, file, cb) {
+    // Accept images only
+    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+        req.fileValidationError = 'Only image files are allowed!';
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+app.post('/img_upload', function(req,res){
+
+    let upload = multer({ storage: storage, fileFilter: imageFilter }).single('single_img');
+
+    upload(req, res, function(err) {
+        // req.file contains information of uploaded file
+        // req.body contains information of text fields, if there were any
+
+        if (req.fileValidationError) {
+            console.log(req.fileValidationError);
+            return res.send(req.fileValidationError);
+        }
+        else if (!req.file) {
+            console.log('No img selected');
+            return res.send('Please select an image to upload');
+        }
+        else if (err instanceof multer.MulterError) {
+            console.log(err);
+            return res.send(err);
+        }
+        else if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+
+        console.log(req.file.path);
+        return res.JSON({"url": req.file.path});
+    });
+})
 
 /* process POST to root to GET login data */
 app.post('/', function(req, res) {
@@ -243,14 +279,5 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
-const imageFilter = function(req, file, cb) {
-    // Accept images only
-    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
-        req.fileValidationError = 'Only image files are allowed!';
-        return cb(new Error('Only image files are allowed!'), false);
-    }
-    cb(null, true);
-};
 
 module.exports = app;
