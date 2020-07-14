@@ -47,7 +47,7 @@
 }
 
 .col__long {
-    width: 15vw;
+    width: 11vw;
     height: 50vh;
     overflow: hidden;
     border-style: solid;
@@ -55,7 +55,7 @@
 }
 
 .col__short {
-    width: 15vw;
+    width: 11vw;
     height: 25vh;
     overflow: hidden;
     border-style: solid;
@@ -63,7 +63,7 @@
 }
 
 .col__short__short {
-    width: 15vw;
+    width: 11vw;
     height: 20vh;
     overflow: hidden;
     border-style: solid;
@@ -71,7 +71,7 @@
 }
 
 .row__short {
-    width: 30vw;
+    width: 22vw;
     height: 20vh;
     overflow: hidden;
     border-style: solid;
@@ -79,7 +79,7 @@
 }
 
 .row__long {
-    width: 100vw;
+    width: 54.95vw;
     height: 20vh;
     overflow: hidden;
     border-style: solid;
