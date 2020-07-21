@@ -454,7 +454,7 @@ class Canvas extends Component {
     }
 
     getImgDragComp(i, searchDest, index) {
-        var defXDensity = 10/window.innerWidth, defYDensity = 10/window.innerHeight, defWidth = '10vw', defHeight = '12vh';
+        var defXDensity = 10/window.innerWidth, defYDensity = 10/window.innerHeight, defWidth = '10vw', defHeight = '13vh';
         var imgObj = { visible: true, dragComp: null, xDensity: defXDensity, yDensity: defYDensity, width: defWidth, height: defHeight, rndRef: null};
 
         console.log(index);
@@ -972,7 +972,7 @@ class Canvas extends Component {
         return (
             <div>
                 
-                <Modal visible={this.state.searchDialogVisibility} width="35%" height="60%" onClickAway={() => this.closeModal()}>
+                <Modal visible={this.state.searchDialogVisibility} width="650" height="575" onClickAway={() => this.closeModal()}>
 
                     {this.getSearchHeader()}
                     <br/>
