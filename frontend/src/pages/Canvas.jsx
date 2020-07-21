@@ -139,47 +139,47 @@ class Canvas extends Component {
         switch(id) {
             case 'stress':
                 imgObj = this.state.stressDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({stressDragObj: imgObj});
                 break;
             case 'strengths':
                 imgObj = this.state.strengthsDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({strengthsDragObj: imgObj});
                 break;
             case 'behaviors':
                 imgObj = this.state.behaviorsDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({behaviorsDragObj: imgObj});
                 break;
             case 'energy':
                 imgObj = this.state.energyDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({energyDragObj: imgObj});
                 break;
             case 'experience_bias':
                 imgObj = this.state.expBiasDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({expBiasDragObj: imgObj});
                 break;
             case 'voice':
                 imgObj = this.state.voiceDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({voiceDragObj: imgObj});
                 break;
             case 'values':
                 imgObj = this.state.valuesDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({valuesDragObj: imgObj});
                 break;
             case 'fixed_mindset':
                 imgObj = this.state.fixedMindsetDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({fixedMindsetDragObj: imgObj});
                 break;
             case 'growth_mindset':
                 imgObj = this.state.growthMindsetDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({growthMindsetDragObj: imgObj});
                 break;
             case 'vision':
@@ -189,12 +189,12 @@ class Canvas extends Component {
                 break;
             case 'purpose':
                 imgObj = this.state.purposeDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({purposeDragObj: imgObj});
                 break;
             case 'deliberate_practices':
                 imgObj = this.state.delibPracticesDragObj;
-                imgObj.delete(key);
+                imgObj.get(key).visible = false;
                 this.setState({delibPracticesDragObj: imgObj});
                 break;
             default:
@@ -969,7 +969,6 @@ class Canvas extends Component {
     }
 
     render () {
-        console.log(this.state.dragVisibilities);
         return (
             <div>
                 
@@ -1082,7 +1081,7 @@ class Canvas extends Component {
                                     <this.purposeContext />
                                     <div className='col__short' style={{borderLeft: 0, borderTop: 0, borderRight: 0, borderBottom: 0}}>
                                         {this.getTextCard(this.state.purpose, 'purpose')}
-                                        { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.visipurposeDragObjonDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                                        { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
                             </div>
