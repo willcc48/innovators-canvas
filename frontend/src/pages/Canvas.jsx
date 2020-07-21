@@ -1089,7 +1089,7 @@ class Canvas extends Component {
                             <div className='col__fourth' ref={this.col4DivRef}>
                                 <MenuProvider id='voice_context' >
                                     <this.voiceContext />
-                                    <div className='col__long' style={{borderRight: 0, borderTop: 0, borderBottom: 0}}>
+                                    <div className='col__long' style={{borderTop: 0, borderBottom: 0}}>
                                         {this.getTextCard(this.state.voice, 'voice')}
                                         { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
@@ -1099,7 +1099,7 @@ class Canvas extends Component {
                             <div className='col__fifth' ref={this.col5DivRef}>
                                 <MenuProvider id='strengths_context' >
                                     <this.strengthsContext />
-                                    <div className='col__short' style={{borderBottom: 0, borderTop: 0}}>
+                                    <div className='col__short' style={{borderLeft: 0, borderBottom: 0, borderTop: 0}}>
                                         {this.getTextCard(this.state.strengths, 'strengths')} 
                                         { [...this.state.strengthsDragObj.values()].map((img, index) => [...this.state.strengthsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
@@ -1107,7 +1107,7 @@ class Canvas extends Component {
 
                                 <MenuProvider id='energy_context' >
                                     <this.energyContext />
-                                    <div className='col__short' style={{borderBottom: 0}}>
+                                    <div className='col__short' style={{borderLeft: 0, borderBottom: 0}}>
                                         {this.getTextCard(this.state.energy, 'energy')}
                                         { [...this.state.energyDragObj.values()].map((img, index) => [...this.state.energyDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
