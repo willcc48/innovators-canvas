@@ -972,7 +972,7 @@ class Canvas extends Component {
         return (
             <div>
                 
-                <Modal visible={this.state.searchDialogVisibility} width="650" height="575" onClickAway={() => this.closeModal()}>
+                <Modal visible={this.state.searchDialogVisibility} width="35%" height="60%" onClickAway={() => this.closeModal()}>
 
                     {this.getSearchHeader()}
                     <br/>
