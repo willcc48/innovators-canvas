@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import ResponsiveNavigation from '../components/ResponsiveNavigation';
 import '../styling/canvas.css';
-import Draggable from 'react-draggable';
 import Modal from 'react-awesome-modal';
 import { Menu, Item, MenuProvider, animation } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css';
@@ -10,6 +9,8 @@ import { Rnd } from "react-rnd";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import BalloonEditor from 'custom-williams-block-build/build/ckeditor';
 import TextareaAutosize from 'react-autosize-textarea';
+import $ from 'jquery'; 
+
 var Spinner = require('react-spinkit');
 
 class Canvas extends Component {
@@ -18,6 +19,8 @@ class Canvas extends Component {
         super(props);
 
         this.state = {
+            loggedIn: false,
+
             firstName: '',
             lastName: '',
             netid: '',
@@ -35,47 +38,56 @@ class Canvas extends Component {
             purpose: '',
             deliberate_practices: '',
 
-            loggedIn: true,
+            stressDragObj: new Map(),
+            strengthsDragObj: new Map(),
+            behaviorsDragObj: new Map(),
+            energyDragObj: new Map(),
+            expBiasDragObj: new Map(),
+            voiceDragObj: new Map(),
+            valuesDragObj: new Map(),
+            fixedMindsetDragObj: new Map(),
+            growthMindsetDragObj: new Map(),
+            visionDragObj: new Map(),
+            purposeDragObj: new Map(),
+            delibPracticesDragObj: new Map(),
 
             loaderVisibility: 'hidden',
-            
-            visible : false,
 
-            stressDrags: [],
-            strengthsDrags: [],
-            behaviorsDrags: [],
-            energyDrags: [],
-            expBiasDrags: [],
-            voiceDrags: [],
-            valuesDrags: [],
-            fixedMindsetDrags: [],
-            growthMindsetDrags: [],
-            visionDrags: [],
-            purposeDrags: [],
-            delibPracticesDrags: [],
+            searchDialogVisibility : false,
+            searchTerm: '',
+            noResults: 'hidden',
+            searchLoaderVisibility: 'hidden',
+            gifSearch: false,
+            searchDest: '',
+            searchImgList: ['', '', '', '', '', ''],
 
-            focusedOnImg: false,
-
-            imgList: ["https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
-            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
-            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
-            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0",
-            "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NjQ3NX0"],
-
-            browserWidth: window.innerWidth,
-            browserHeight: window.innerHeight,
-
-            imgXDensity: 10/window.innerWidth,
-            imgYDensity: 10/window.innerHeight,
-            imgWidth: '10vw',
-            imgHeight: '10vh',
+            focusedOnImg: false
         }
 
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 
+        this.topDivRef = React.createRef();
+        this.middleDivRef = React.createRef();
+        this.col1DivRef = React.createRef();
+        this.col2DivRef = React.createRef();
+        this.col3DivRef = React.createRef();
+        this.col4DivRef = React.createRef();
+        this.col5DivRef = React.createRef();
+        this.bottomDivRef = React.createRef();
+
+        this.dragIndex = 0;
+        this.focusedId = -1;
+        this.setImgBlur = this.setImgBlur.bind(this);
+        this.setImgFocus = this.setImgFocus.bind(this);
+
+        this.justDeletedIndex = -1;
+
+        this.imgTimer = null;
+        this.gifTimer = null;
         this.infoTimer = null;
-        this.setloaderVisibility = this.setloaderVisibility.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.pressedEnter = false;
 
         this.editorConfiguration = {
             toolbar: [
@@ -91,22 +103,11 @@ class Canvas extends Component {
                 'fontFamily',
                 '|',
                 'heading',
-            ],
-            simpleUpload: {
-                uploadUrl: 'http://localhost:9000/img_upload',
-                withCredentials: true,
-            }
+            ]
         };
 
-        this.img1Ref = React.createRef();
-        this.img2Ref = React.createRef();
-        this.img3Ref = React.createRef();
-        this.img4Ref = React.createRef();
-        this.img5Ref = React.createRef();
-
-
-        this.onImageClick = ({ event, props }) => this.openModal();
-        this.onGifClick = ({ event, props }) => this.openModal();
+        this.onImageClick = (id) => this.openModal(id, false);
+        this.onGifClick = (id) => this.openModal(id, true);
 
         this.stressContext = () => (this.getContextMenuItems('stress'));
         this.strengthsContext = () => (this.getContextMenuItems('strengths'));
@@ -133,13 +134,78 @@ class Canvas extends Component {
     }
 
     deleteImage(id) {
+        var key = this.focusedId;
+        var imgObj;
+        switch(id) {
+            case 'stress':
+                imgObj = this.state.stressDragObj;
+                imgObj.delete(key);
+                this.setState({stressDragObj: imgObj});
+                break;
+            case 'strengths':
+                imgObj = this.state.strengthsDragObj;
+                imgObj.delete(key);
+                this.setState({strengthsDragObj: imgObj});
+                break;
+            case 'behaviors':
+                imgObj = this.state.behaviorsDragObj;
+                imgObj.delete(key);
+                this.setState({behaviorsDragObj: imgObj});
+                break;
+            case 'energy':
+                imgObj = this.state.energyDragObj;
+                imgObj.delete(key);
+                this.setState({energyDragObj: imgObj});
+                break;
+            case 'experience_bias':
+                imgObj = this.state.expBiasDragObj;
+                imgObj.delete(key);
+                this.setState({expBiasDragObj: imgObj});
+                break;
+            case 'voice':
+                imgObj = this.state.voiceDragObj;
+                imgObj.delete(key);
+                this.setState({voiceDragObj: imgObj});
+                break;
+            case 'values':
+                imgObj = this.state.valuesDragObj;
+                imgObj.delete(key);
+                this.setState({valuesDragObj: imgObj});
+                break;
+            case 'fixed_mindset':
+                imgObj = this.state.fixedMindsetDragObj;
+                imgObj.delete(key);
+                this.setState({fixedMindsetDragObj: imgObj});
+                break;
+            case 'growth_mindset':
+                imgObj = this.state.growthMindsetDragObj;
+                imgObj.delete(key);
+                this.setState({growthMindsetDragObj: imgObj});
+                break;
+            case 'vision':
+                imgObj = this.state.visionDragObj;
+                imgObj.get(key).visible = false;
+                this.setState({visionDragObj: imgObj})
+                break;
+            case 'purpose':
+                imgObj = this.state.purposeDragObj;
+                imgObj.delete(key);
+                this.setState({purposeDragObj: imgObj});
+                break;
+            case 'deliberate_practices':
+                imgObj = this.state.delibPracticesDragObj;
+                imgObj.delete(key);
+                this.setState({delibPracticesDragObj: imgObj});
+                break;
+            default:
+        }
 
+        this.justDeletedIndex = key;
     }
 
-    updateWindowDimensions() {
-        this.setState({ browserWidth: window.innerWidth, browserHeight: window.innerHeight });
-        this.setState({ imgXDensity: this.state.imgXDensity, imgYDensity: this.state.imgYDensity });
 
+    updateWindowDimensions() {
+        this.updateDragPositions();
 
         var width=this.rBound/window.innerWidth;
         var height=this.bBound/window.innerHeight;
@@ -215,7 +281,7 @@ class Canvas extends Component {
             case 'fixed_mindset':
                 this.setState({fixed_mindset: value});
                 break;
-            case 'growth_mindeet':
+            case 'growth_mindset':
                 this.setState({growth_mindset: value});
                 break;
             case 'vision':
@@ -257,15 +323,19 @@ class Canvas extends Component {
         )
     }
     
-    openModal() {
+    openModal(id, gif) {
         this.setState({
-            visible : true
+            searchDialogVisibility : true,
+            gifSearch: gif,
+            searchDest: id,
+            searchTerm: '',
+            searchImgList: []
         });
     }
 
     closeModal() {
         this.setState({
-            visible : false
+            searchDialogVisibility : false
         });
     }
 
@@ -284,8 +354,6 @@ class Canvas extends Component {
                         growth_mindset: this.state.growth_mindset, vision: this.state.vision, purpose: this.state.purpose,
                         deliberate_practices: this.state.deliberate_practices};
         
-        console.log(userData);
-
         var xhr = new window.XMLHttpRequest();
         xhr.open('POST', 'http://localhost:9000/canvas_data', true);
         xhr.withCredentials = true;
@@ -304,95 +372,640 @@ class Canvas extends Component {
         xhr.send(JSON.stringify(userData));
     }
 
-    getImgDragComp(i) {
-        const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
-        return (
-            <Draggable {...dragHandlers}
-                handle=".img__handle"
-            >
-                <div style={{ position: 'absolute', zIndex: 400}}>
-                    <div className='img__minor'>
-                    <div className="img__handle"></div>
+    deleteAndReplcaeDrags(drags) {
 
-                        <button className="image" style={{resize: "both", backgroundImage: 'url('+this.state.imgList[i]+')'}}/>
-
-                    </div>
-                </div>
-            </Draggable>
-        )
     }
 
-    addImgDrag(button) {
-        console.log(button.id);
-        switch(button.id) {
+    updateDragPositions() {
+        this.loopAndUpdatePositions('stress', this.state.stressDragObj);
+        this.loopAndUpdatePositions('strengths', this.state.strengthsDragObj);
+        this.loopAndUpdatePositions('behaviors', this.state.behaviorsDragObj);
+        this.loopAndUpdatePositions('energy', this.state.energyDragObj);
+        this.loopAndUpdatePositions('experience_bias', this.state.expBiasDragObj);
+        this.loopAndUpdatePositions('voice', this.state.voiceDragObj);
+        this.loopAndUpdatePositions('values', this.state.valuesDragObj);
+        this.loopAndUpdatePositions('fixed_mindset', this.state.fixedMindsetDragObj);
+        this.loopAndUpdatePositions('growth_mindset', this.state.growthMindsetDragObj);
+        this.loopAndUpdatePositions('vision', this.state.visionDragObj);
+        this.loopAndUpdatePositions('purpose', this.state.purposeDragObj);
+        this.loopAndUpdatePositions('deliberate_practices', this.state.delibPracticesDragObj);
+    }
+
+    loopAndUpdatePositions(id, dragMap) {
+        if(dragMap != null) {
+            for(var value of dragMap.values()) {
+                var offsetX, offsetY;
+                var xDensity = value.xDensity, yDensity = value.yDensity;
+                switch(id) {
+                    case 'stress':
+                        offsetX = this.col1DivRef.current.offsetLeft;
+                        offsetY = this.col1DivRef.current.offsetTop;
+                        break;
+                    case 'strengths':
+                        offsetX = this.col5DivRef.current.offsetLeft;
+                        offsetY = this.col5DivRef.current.offsetTop;
+                        break;
+                    case 'behaviors':
+                        offsetX = this.col1DivRef.current.offsetLeft;
+                        offsetY = this.col1DivRef.current.offsetTop + this.col1DivRef.current.offsetHeight / 2;
+                        break;
+                    case 'energy':
+                        offsetX = this.col5DivRef.current.offsetLeft;
+                        offsetY = this.col5DivRef.current.offsetTop + this.col5DivRef.current.offsetHeight / 2;
+                        break;
+                    case 'experience_bias':
+                        offsetX = this.col2DivRef.current.offsetLeft;
+                        offsetY = this.col2DivRef.current.offsetTop;
+                        break;
+                    case 'voice':
+                        offsetX = this.col4DivRef.current.offsetLeft;
+                        offsetY = this.col4DivRef.current.offsetTop;
+                        break;
+                    case 'values':
+                        offsetX = this.col3DivRef.current.offsetLeft;
+                        offsetY = this.bottomDivRef.current.offsetTop;
+                        break;
+                    case 'fixed_mindset':
+                        offsetX = this.bottomDivRef.current.offsetLeft;
+                        offsetY = this.bottomDivRef.current.offsetTop;
+                        break;
+                    case 'growth_mindset':
+                        offsetX = this.col4DivRef.current.offsetLeft;
+                        offsetY = this.bottomDivRef.current.offsetTop;
+                        break;
+                    case 'vision':
+                        offsetX = this.topDivRef.current.offsetLeft;
+                        offsetY = this.topDivRef.current.offsetTop;
+                        break;
+                    case 'purpose':
+                        offsetX = this.col3DivRef.current.offsetLeft;
+                        offsetY = this.col1DivRef.current.offsetTop + this.col3DivRef.current.offsetHeight / 2;
+                        break;
+                    case 'deliberate_practices':
+                        offsetX = this.col3DivRef.current.offsetLeft;
+                        offsetY = this.col3DivRef.current.offsetTop;
+                        break;
+                    default:
+                }
+                
+                value.rndRef.updatePosition({ x: (xDensity * window.innerWidth)+offsetX, y: (yDensity * window.innerHeight)+offsetY });
+            }
+        }
+    }
+
+    getImgDragComp(i, searchDest, index) {
+        var defXDensity = 10/window.innerWidth, defYDensity = 10/window.innerHeight, defWidth = '10vw', defHeight = '10vh';
+        var imgObj = { visible: true, dragComp: null, xDensity: defXDensity, yDensity: defYDensity, width: defWidth, height: defHeight, rndRef: null};
+
+        console.log(index);
+
+        imgObj.dragComp = (
+            <Rnd
+                bounds='parent'
+                ref={c => { 
+                    if(index !== this.justDeletedIndex) {
+                        switch(searchDest) {
+                            case 'stress':
+                                imgObj = this.state.stressDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({stressDragObj: imgObj});
+                                break;
+                            case 'strengths':
+                                imgObj = this.state.strengthsDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({strengthsDragObj: imgObj});
+                                break;
+                            case 'behaviors':
+                                imgObj = this.state.behaviorsDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({behaviorsDragObj: imgObj});
+                                break;
+                            case 'energy':
+                                imgObj = this.state.energyDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({energyDragObj: imgObj});
+                                break;
+                            case 'experience_bias':
+                                imgObj = this.state.expBiasDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({expBiasDragObj: imgObj});
+                                break;
+                            case 'voice':
+                                imgObj = this.state.voiceDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({voiceDragObj: imgObj});
+                                break;
+                            case 'values':
+                                imgObj = this.state.valuesDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({valuesDragObj: imgObj});
+                                break;
+                            case 'fixed_mindset':
+                                imgObj = this.state.fixedMindsetDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({fixedMindsetDragObj: imgObj});
+                                break;
+                            case 'growth_mindset':
+                                imgObj = this.state.growthMindsetDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({growthMindsetDragObj: imgObj});
+                                break;
+                            case 'vision':
+                                imgObj = this.state.visionDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({visionDragObj: imgObj});
+                                break;
+                            case 'purpose':
+                                imgObj = this.state.purposeDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({purposeDragObj: imgObj});
+                                break;
+                            case 'deliberate_practices':
+                                imgObj = this.state.delibPracticesDragObj;
+                                imgObj.get(index).rndRef = c;
+                                this.setState({delibPracticesDragObj: imgObj});
+                                break;
+                            default:
+                    }
+                    }
+                }}
+                style={{display: 'flex', flexDirection: 'column'}}
+                default={{
+                    x: defXDensity * window.innerWidth,
+                    y: defYDensity * window.innerHeight,
+                    width: defWidth,
+                    height: defHeight
+                }}
+                onDragStop={(e, d) => {
+                    switch(searchDest) {
+                        case 'stress':
+                            imgObj = this.state.stressDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({stressDragObj: imgObj});
+                            break;
+                        case 'strengths':
+                            imgObj = this.state.strengthsDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({strengthsDragObj: imgObj});
+                            break;
+                        case 'behaviors':
+                            imgObj = this.state.behaviorsDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({behaviorsDragObj: imgObj});
+                            break;
+                        case 'energy':
+                            imgObj = this.state.energyDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({energyDragObj: imgObj});
+                            break;
+                        case 'experience_bias':
+                            imgObj = this.state.expBiasDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({expBiasDragObj: imgObj});
+                            break;
+                        case 'voice':                            
+                            imgObj = this.state.voiceDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({voiceDragObj: imgObj});
+                            break;
+                        case 'values':
+                            imgObj = this.state.valuesDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({valuesDragObj: imgObj});
+                            break;
+                        case 'fixed_mindset':
+                            imgObj = this.state.fixedMindsetDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({fixedMindsetDragObj: imgObj});
+                            break;
+                        case 'growth_mindset':
+                            imgObj = this.state.growthMindsetDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({growthMindsetDragObj: imgObj});
+                            break;
+                        case 'vision':
+                            imgObj = this.state.visionDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({visionDragObj: imgObj});
+
+                            console.log('width: '+imgObj.get(index).width+' height: '+imgObj.get(index).height);
+                            break;
+                        case 'purpose':
+                            imgObj = this.state.purposeDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({purposeDragObj: imgObj});
+                            break;
+                        case 'deliberate_practices':
+                            imgObj = this.state.delibPracticesDragObj;
+                            imgObj.get(index).xDensity = d.x/window.innerWidth;
+                            imgObj.get(index).yDensity = d.y/window.innerHeight;
+                            this.setState({delibPracticesDragObj: imgObj});
+                            break;
+                        default:
+                }
+                }}
+                onResize={(e, direction, ref, delta, position) => {
+                    switch(searchDest) {
+                        case 'stress':
+                            imgObj = this.state.stressDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({stressDragObj: imgObj});
+                            break;
+                        case 'strengths':
+                            imgObj = this.state.strengthsDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({strengthsDragObj: imgObj});
+                            break;
+                        case 'behaviors':
+                            imgObj = this.state.behaviorsDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({behaviorsDragObj: imgObj});
+                            break;
+                        case 'energy':
+                            imgObj = this.state.energyDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({energyDragObj: imgObj});
+                            break;
+                        case 'experience_bias':
+                            imgObj = this.state.expBiasDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({expBiasDragObj: imgObj});
+                            break;
+                        case 'voice':
+                            imgObj = this.state.voiceDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({voiceDragObj: imgObj});
+                            break;
+                        case 'values':
+                            imgObj = this.state.valuesDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({valuesDragObj: imgObj});
+                            break;
+                        case 'fixed_mindset':
+                            imgObj = this.state.fixedMindsetDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({fixedMindsetDragObj: imgObj});
+                            break;
+                        case 'growth_mindset':
+                            imgObj = this.state.growthMindsetDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({growthMindsetDragObj: imgObj});
+                            break;
+                        case 'vision':
+                            imgObj = this.state.visionDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({visionDragObj: imgObj});
+                            break;
+                        case 'purpose':
+                            imgObj = this.state.purposeDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({purposeDragObj: imgObj});
+                            break;
+                        case 'deliberate_practices':
+                            imgObj = this.state.delibPracticesDragObj;
+                            imgObj.get(index).width = ref.offsetWidth;
+                            imgObj.get(index).height = ref.offsetHeight;
+                            this.setState({delibPracticesDragObj: imgObj});
+                            break;
+                        default:
+                    }
+                }}
+            >
+                <button id={index} style={{padding: '10px', flex: 1, backgroundImage: 'url('+this.state.searchImgList[i]+')'}} onBlur={e => this.setImgBlur(e.target.id)}
+                    onMouseDown={e => this.setImgFocus(e.target.id)} className='img__button' ></button>
+                <TextareaAutosize placeholder='meaning...' style={{resize: "none"}} rows={1} onMouseDown={e => e.stopPropagation()}/>
+            </Rnd>
+        )
+
+        return imgObj;
+    }
+
+
+    addImgDrag(searchButton) {
+        var imgObj, searchDest = this.state.searchDest;
+        switch(searchButton.id) {
             case 'img1':
-                this.state.imgDrags.push(this.getImgDragComp(0));
+                imgObj = this.getImgDragComp(0, searchDest, this.dragIndex);
                 break;
             case 'img2':
-                this.state.imgDrags.push(this.getImgDragComp(1));
+                imgObj = this.getImgDragComp(1, searchDest, this.dragIndex);
                 break;
             case 'img3':
-                this.state.imgDrags.push(this.getImgDragComp(2));
+                imgObj = this.getImgDragComp(2, searchDest, this.dragIndex);
                 break;
             case 'img4':
-                this.state.imgDrags.push(this.getImgDragComp(3));
+                imgObj = this.getImgDragComp(3, searchDest, this.dragIndex);
                 break;
             case 'img5':
-                this.state.imgDrags.push(this.getImgDragComp(4));
+                imgObj = this.getImgDragComp(4, searchDest, this.dragIndex);
+                break;
+            case 'img6':
+                imgObj = this.getImgDragComp(5, searchDest, this.dragIndex);
                 break;
             default:
                 break;
         }
+
+        var map;
+        switch(searchDest) {
+            case 'stress':
+                map = this.state.stressDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({stressDragObj: map});
+                break;
+            case 'strengths':
+                map = this.state.strengthsDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({strengthsDragObj: map});
+                break;
+            case 'behaviors':
+                map = this.state.behaviorsDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({behaviorsDragObj: map});
+                break;
+            case 'energy':
+                map = this.state.energyDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({energyDragObj: map});
+                break;
+            case 'experience_bias':
+                map = this.state.expBiasDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({expBiasDragObj: map});
+                break;
+            case 'voice':
+                map = this.state.voiceDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({voiceDragObj: map});
+                break;
+            case 'values':
+                map = this.state.valuesDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({valuesDragObj: map});
+                break;
+            case 'fixed_mindset':
+                map = this.state.fixedMindsetDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({fixedMindsetDragObj: map});
+                break;
+            case 'growth_mindset':
+                map = this.state.growthMindsetDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({growthMindsetDragObj: map});
+                break;
+            case 'vision':
+                map = this.state.visionDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({visionDragObj: map});
+                break;
+            case 'purpose':
+                map = this.state.purposeDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({purposeDragObj: map});
+                break;
+            case 'deliberate_practices':
+                map = this.state.delibPracticesDragObj;
+                map.set(this.dragIndex, imgObj);
+                this.setState({delibPracticesDragObj: map});
+                break;
+            default:            
+        }
+
+        this.dragIndex++;
     }
 
-    setImgFocus() {
-        this.setState({focusedOnImg: true});
-        console.log('focused');
+    setImgFocus(buttonId) {
+        this.focusedId = Number(buttonId);
+        console.log('focused on img: ' + this.focusedId);
+        console.log(this.state.visionDragObj);
+        this.setState({focusedOnImg: true})
     }
 
-    setImgBlur() {
-        this.setState({focusedOnImg: false});
-        console.log('blurred');
+    setImgBlur(buttonId) {
+        if(Number(buttonId) === this.focusedId) {
+            this.setState({focusedOnImg: false})
+        }
+    }
+
+    httpGetAsync(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                callback(xmlHttp.responseText);
+            }
+        }
+
+        xmlHttp.open("GET", theUrl, true);
+        xmlHttp.send(null);
+        return;
+    }
+
+    tenorCallback_search(responsetext) {
+        var response_objects = JSON.parse(responsetext);
+
+        var top_gifs = response_objects["results"];
+        for(var i=0; i<top_gifs.length; i++) {
+            let a = this.state.searchImgList;
+            a[i] = top_gifs[i]["media"][0]["nanogif"]["url"];
+            this.setState({searchImgList: a});
+        }
+
+        this.setState({searchLoaderVisibility: 'hidden'});
+        return;
+    }
+
+    setGifTimer() {
+        if(this.gifTimer != null) {
+            clearTimeout(this.gifTimer);
+        }
+        if(this.pressedEnter) {
+            this.gifTimer = setTimeout(this.grab_gifs.bind(this),0);
+        } else {
+            this.gifTimer = setTimeout(this.grab_gifs.bind(this),1000);
+        }
+    }
+    
+    grab_gifs() {
+        this.setState({searchLoaderVisibility: 'visible'});
+        var search_term = this.state.searchTerm;
+
+        var imgs = ['', '', '', '', '', ''];
+        this.setState({searchImgList: imgs})
+
+        var apikey = "QCI6O3ZZHMW5";
+        var lmt = 6;
+
+        var search_url = "https://api.tenor.com/v1/search?q=" + search_term + "&key=" +
+                apikey + "&limit=" + lmt;
+
+        this.httpGetAsync(search_url, this.tenorCallback_search.bind(this));
+
+        return;
+    }
+
+    setImgTimer = () => {
+        if(this.imgTimer != null) {
+            clearTimeout(this.imgTimer);
+        }
+        if(this.pressedEnter) {
+            this.imgTimer = setTimeout(this.grab_pics, 0);
+        } else {
+            this.imgTimer = setTimeout(this.grab_pics, 1000);
+        }
+    }
+  
+    grab_pics = () => {
+        this.setState({searchLoaderVisibility: 'visible'});
+        var search_term = this.state.searchTerm;
+
+        var imgs = ['', '', '', '', '', ''];
+        this.setState({searchImgList: imgs})
+
+        if(!search_term) {
+            this.setState({searchLoaderVisibility: 'hidden'});
+            return;
+        }
+
+        let context = this;
+        $.getJSON('https://api.unsplash.com/search/photos?query='+search_term+'&per_page=10&client_id=LLxk_QhznsOac6ltGXajK5rCPUR-OX-kmzH-78kd9wM', function(data) {      
+            var imageList = data.results;
+
+            var j=0;
+            $.each(imageList, function(i, val) {
+                var imageURL = val.urls.small;
+                var imageWidth = val.width;
+                var imageHeight = val.height;
+                
+                if (imageWidth > imageHeight && j < 6) {
+                    let a = context.state.searchImgList;
+                    a[j] = imageURL;
+                    context.setState({searchImgList: a});
+                    j++;
+                }
+            });
+
+            if(imageList.length === 0) {
+                this.setState({noResults: 'visible'});
+            } else {
+                this.setState({noResults: 'hidden'});
+            }
+
+            context.setState({searchLoaderVisibility: 'hidden'});
+        }.bind(this));
+    }
+
+    handleSearchChange(event) {
+        this.setState({searchTerm: event.target.value});
+    }
+
+    getSearchHeader() {
+        if(this.state.gifSearch) {
+            return (
+                <div>
+                    <h1>Add a Gif</h1>
+                    <p>Just click on a gif to add it to your canvas.</p>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <h1>Add an Image</h1>
+                    <p>Just click on an image to add it to your canvas.</p>
+                </div>
+            );
+        }
+    }
+
+    onEnterPressImg = (e) => {
+        if(e.keyCode === 13 && e.shiftKey === false) {
+            e.preventDefault();
+            this.pressedEnter = true;
+            this.setImgTimer();
+        } else {
+            this.pressedEnter = false;
+        }
+    }
+
+    onEnterPressGif = (e) => {
+        if(e.keyCode === 13 && e.shiftKey === false) {
+            e.preventDefault();
+            this.pressedEnter = true;
+            this.setGifTimer();
+        }
+    }
+
+    getSearchText(context) {
+        if(!this.state.gifSearch) {
+            return (
+                <TextareaAutosize value={this.state.searchTerm} onChange={this.handleSearchChange } onKeyDown={this.onEnterPressImg} placeholder='search...' style={{resize: "none"}} maxRows={2} rows={1} />
+            )
+        } else {
+            return (
+                <TextareaAutosize value={this.state.searchTerm} onChange={this.handleSearchChange} onKeyDown={this.onEnterPressGif} placeholder='search...' style={{resize: "none"}} maxRows={2} rows={1} />
+            )
+        }
     }
 
     render () {
-
+        console.log(this.state.dragVisibilities);
         return (
             <div>
                 
-                <Modal visible={this.state.visible} width="800" height="500" onClickAway={() => this.closeModal()}>
-                    <div>
-                        <h1>Add an Image</h1>
-                        <p>Just click on an image to add it to your canvas.</p>
-                        
+                <Modal visible={this.state.searchDialogVisibility} width="600" height="525" onClickAway={() => this.closeModal()}>
+
+                    {this.getSearchHeader()}
+                    <br/>
+
+                    <div style={{height: '25px'}}>
+                        {this.getSearchText(this)}
+                    </div>
+
+                    <div className="grid" id="grid">
+                        <br/>
+                        <Spinner className='loader' color='lightgray' style={{visibility: this.state.searchLoaderVisibility}}/>
+                        <br/>
+                            <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
+                                <div className="image"><button id="img1" style={{backgroundImage: 'url('+this.state.searchImgList[0]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <div style={{width: '5px'}}></div>
+                                <div className="image"><button id="img2" style={{backgroundImage: 'url('+this.state.searchImgList[1]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <div style={{width: '5px'}}></div>
+                                <div className="image"><button id="img3" style={{backgroundImage: 'url('+this.state.searchImgList[2]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                            </div>
+                            <div style={{height: '5px'}}></div>
+                            <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
+                                <div className="image"><button id="img4" style={{backgroundImage: 'url('+this.state.searchImgList[3]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <div style={{width: '5px'}}></div>
+                                <div className="image"><button id="img5" style={{backgroundImage: 'url('+this.state.searchImgList[4]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                <div style={{width: '5px'}}></div>
+                                <div className="image"><button id="img6" style={{backgroundImage: 'url('+this.state.searchImgList[5]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                            </div>
                     </div>
 
                     <br/>
 
-                    <TextareaAutosize placeholder='Search an image...' style={{resize: "none"}} rows={1} />
-
-                    <br/><br/>
-
-                    <div className="grid" id="grid">
-                        <div>
-                            <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
-                                <div ref={this.img1Ref} className="image"><button id="img1" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
-                                <br/>
-                                <div ref={this.img2Ref} className="image"><button id="img2" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
-                                <br/>
-                                <div ref={this.img3Ref} className="image"><button id="img3" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
-                            </div>
-                            <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
-                                <div ref={this.img4Ref} className="image"><button id="img4" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
-                                <br/>
-                                <div ref={this.img5Ref} className="image"><button id="img5" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
-                                <br/>
-                                <div ref={this.img5Ref} className="image"><button id="img6" className="img__button" onClick={e => this.addImgDrag(e.target)}/></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br/><br/>
+                    <p style={{visibility: this.state.noResults}}>No results for your search.</p>
                     
                     <button onClick={() => this.closeModal()}>Close</button>
                 </Modal>
@@ -412,81 +1025,56 @@ class Canvas extends Component {
                         <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
                         <br/>
 
-                        <div className='canvas__top'>
+                        <div className='canvas__top' ref={this.topDivRef}>
 
                             <MenuProvider id='vision_context' >
                                 <this.visionContext />
                                 <div className='row__long' >
-                                    {this.getTextCard(this.state.vision, 'vision')}
-                                    { this.state.visionDrags.map((img, index) => <div key={index}>{img}</div>) }
-
-                                    <Rnd
-                                            style={{display: 'flex', flexDirection: 'column'}}
-                                            bounds='parent'
-                                            position={{ x: this.state.browserWidth*this.state.imgXDensity, y: this.state.browserHeight*this.state.imgYDensity }}
-                                            size={{ width: this.state.imgWidth, height: this.state.imgHeight }}
-                                            onDragStop={(e, d) => {
-                                                this.setState({ imgXDensity: d.x/this.state.browserWidth, imgYDensity: d.y/this.state.browserHeight });
-                                            }}
-                                            onResizeStop={(e, direction, ref, delta, position) => {
-                                                console.log(position);
-                                                this.setState({
-                                                imgWidth: ref.style.width,
-                                                imgHeight: ref.style.height,
-                                                ...position
-                                                });
-                                            }}
-                                        >
-
-                                                <button style={{flex: 1}} onBlur={this.setImgBlur.bind(this)} onMouseDown={this.setImgFocus.bind(this)}
-                                                    className='img__button'></button>
-                                                <TextareaAutosize placeholder='meaning...' style={{resize: "none"}} rows={1} onMouseDown={e => e.stopPropagation()}/>
-                                        </Rnd>
+                                    {this.getTextCard(this.state.vision, 'vision')}        
+                                    { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }                         
                                 </div>
                             </MenuProvider>
 
                         </div>
                         
-                        <div className='canvas__middle'>
+                        <div className='canvas__middle' ref={this.middleDivRef}>
 
-                            <div className='col__first'>
+                            <div className='col__first' ref={this.col1DivRef}>
 
                                 <MenuProvider id='stress_context' >
                                     <this.stressContext />
-                                    <div className='col__short' style={{borderRight: 0, borderBottom: 0, borderTop: 0}}>
+                                    <div className='col__short' style={{borderRight: 0, borderBottom: 0, borderTop: 0}} >
                                         {this.getTextCard(this.state.stress, 'stress')} 
-                                        { this.state.stressDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
 
                                 <MenuProvider id='behaviors_context' >
                                     <this.behaviorsContext />
                                     <div className='col__short' style={{borderRight: 0, borderBottom: 0, zIndex: 10}}>
-
                                         {this.getTextCard(this.state.behaviors, 'behaviors')} 
-                                        { this.state.behaviorsDrags.map((img, index) => <div key={index}>{img}</div>) }
-                                        
+                                        { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
 
                             </div>
 
-                            <div className='col__second'>
+                            <div className='col__second' ref={this.col2DivRef}>
                                 <MenuProvider id='experience_bias_context' >
                                     <this.expBiasContext />
                                     <div className='col__long' style={{borderTop: 0, borderBottom: 0}}>
                                         {this.getTextCard(this.state.experience_bias, 'experience_bias')}
-                                        { this.state.expBiasDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
                             </div>
 
-                            <div className='col__third'>
+                            <div className='col__third' ref={this.col3DivRef}>
                                 <MenuProvider id='deliberate_practices_context' >
                                     <this.delibPracticesContext />
                                     <div className='col__short' style={{borderRight: 0, borderLeft: 0, borderTop: 0}}>
                                         {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
-                                        { this.state.delibPracticesDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
 
@@ -494,27 +1082,27 @@ class Canvas extends Component {
                                     <this.purposeContext />
                                     <div className='col__short' style={{borderLeft: 0, borderTop: 0, borderRight: 0, borderBottom: 0}}>
                                         {this.getTextCard(this.state.purpose, 'purpose')}
-                                        { this.state.purposeDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.visipurposeDragObjonDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
                             </div>
 
-                            <div className='col__fourth'>
+                            <div className='col__fourth' ref={this.col4DivRef}>
                                 <MenuProvider id='voice_context' >
                                     <this.voiceContext />
                                     <div className='col__long' style={{borderRight: 0, borderTop: 0, borderBottom: 0}}>
                                         {this.getTextCard(this.state.voice, 'voice')}
-                                        { this.state.voiceDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
                             </div>
 
-                            <div className='col__fifth'>
+                            <div className='col__fifth' ref={this.col5DivRef}>
                                 <MenuProvider id='strengths_context' >
                                     <this.strengthsContext />
                                     <div className='col__short' style={{borderBottom: 0, borderTop: 0}}>
                                         {this.getTextCard(this.state.strengths, 'strengths')} 
-                                        { this.state.strengthsDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.strengthsDragObj.values()].map((img, index) => [...this.state.strengthsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
 
@@ -522,19 +1110,19 @@ class Canvas extends Component {
                                     <this.energyContext />
                                     <div className='col__short' style={{borderBottom: 0}}>
                                         {this.getTextCard(this.state.energy, 'energy')}
-                                        { this.state.energyDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                        { [...this.state.energyDragObj.values()].map((img, index) => [...this.state.energyDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                     </div>
                                 </MenuProvider>
                             </div>
 
                         </div>
 
-                        <div className='canvas__bottom'>
+                        <div className='canvas__bottom' ref={this.bottomDivRef}>
                             <MenuProvider id='fixed_mindset_context' >
                                 <this.fixedMindsetContext />
                                 <div className='row__short'>
                                     {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
-                                    { this.state.fixedMindsetDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                    { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragCompmg}</Fragment>) }
                                 </div>
                             </MenuProvider>
 
@@ -542,7 +1130,7 @@ class Canvas extends Component {
                                 <this.valuesContext />
                                 <div className='col__short__short' style={{borderLeft: 0, borderRight: 0}}>
                                     {this.getTextCard(this.state.values, 'values')}
-                                    { this.state.valuesDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                    { [...this.state.valuesDragObj.values()].map((img, index) => [...this.state.valuesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                 </div>
                             </MenuProvider>
 
@@ -550,7 +1138,7 @@ class Canvas extends Component {
                                 <this.growthMindsetContext />
                                 <div className='row__short'>
                                     {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
-                                    { this.state.growthMindsetDrags.map((img, index) => <div key={index}>{img}</div>) }
+                                    { [...this.state.growthMindsetDragObj.values()].map((img, index) => [...this.state.growthMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                                 </div>
                             </MenuProvider>
 

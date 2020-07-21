@@ -207,45 +207,6 @@ app.post('/canvas_data', async function(req, res) {
     return saved_res.end();
 });
 
-const imageFilter = function(req, file, cb) {
-    // Accept images only
-    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
-        req.fileValidationError = 'Only image files are allowed!';
-        return cb(new Error('Only image files are allowed!'), false);
-    }
-    cb(null, true);
-};
-
-app.post('/img_upload', function(req,res){
-
-    let upload = multer({ storage: storage, fileFilter: imageFilter }).single('single_img');
-
-    upload(req, res, function(err) {
-        // req.file contains information of uploaded file
-        // req.body contains information of text fields, if there were any
-
-        if (req.fileValidationError) {
-            console.log(req.fileValidationError);
-            return res.send(req.fileValidationError);
-        }
-        else if (!req.file) {
-            console.log('No img selected');
-            return res.send('Please select an image to upload');
-        }
-        else if (err instanceof multer.MulterError) {
-            console.log(err);
-            return res.send(err);
-        }
-        else if (err) {
-            console.log(err);
-            return res.send(err);
-        }
-
-        console.log(req.file.path);
-        return res.JSON({"url": req.file.path});
-    });
-})
-
 /* process POST to root to GET login data */
 app.post('/', function(req, res) {
     var access_token = req.body.access_token;
