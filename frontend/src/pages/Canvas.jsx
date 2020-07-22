@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-import ResponsiveNavigation from '../components/ResponsiveNavigation';
+import MaterialNavBar from '../components/MaterialNavBar';
 import '../styling/canvas.css';
 import { Menu, Item, MenuProvider, animation } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css';
@@ -9,14 +9,21 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import BalloonEditor from 'custom-williams-block-build/build/ckeditor';
 import TextareaAutosize from 'react-autosize-textarea';
 
+import { Link } from "@reach/router";
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Paper from '@material-ui/core/Paper';
 import { Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Box from "@material-ui/core/Box";
 
 import $ from 'jquery'; 
 import { DialogContent, DialogTitle, DialogContentText } from '@material-ui/core';
+import OutlinedCard from '../components/OutlinedCard';
 
 var Spinner = require('react-spinkit');
 
@@ -26,7 +33,8 @@ class Canvas extends Component {
         super(props);
 
         this.state = {
-            loggedIn: false,
+            loggedIn: null,
+            canvasVisible: 'hidden',
 
             firstName: '',
             lastName: '',
@@ -244,7 +252,7 @@ class Canvas extends Component {
             .then(res => {
                 var data = res.data;
                 if(data.netid) {
-                    this.setState({loggedIn: true})
+                    this.setState({loggedIn: true, canvasVisible: 'visible'})
                     this.setState({firstName: data.firstName, lastName: data.lastName, netid: data.netid, stress: data.stress,
                                    strengths: data.strengths, behaviors: data.behaviors, energy: data.energy, experience_bias: data.experience_bias,
                                    voice: data.voice, values: data.values, fixed_mindset: data.fixed_mindset, growth_mindset: data.growth_mindset,
@@ -999,9 +1007,28 @@ class Canvas extends Component {
 
     render () {
 
+        if(!this.state.loggedIn && this.state.loggedIn !== null) {
+            return (
+                <div>
+                <MaterialNavBar loggedIn={this.state.loggedIn} isHome={false}/>
+                <br/><br/><br/><br/><br/>
+                <Grid
+                container
+                justify="center"
+                >
+                <Card variant="outlined"   direction="column" alignItems="center" justify="center" style={{maxWidth: 200}}>
+                    <CardContent>
+                        <Button component={ Link } to='/login' variant="outlined" color="primary">Login</Button>
+                        <Typography style={{marginTop: 15}} variant='body2'>Login to access your canvas.</Typography>
+                    </CardContent>
+                </Card>
+                </Grid>
+                </div>
+            );
+        }
+        
         return (
-            <div>
-                
+            <div style={{visibility: this.state.canvasVisible}}>
                 <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.isDialogOpen}>
                     {this.getSearchHeader()}
                     <DialogContent>
@@ -1039,18 +1066,50 @@ class Canvas extends Component {
                     </DialogContent>
                 </Dialog>
 
-                <ResponsiveNavigation loggedIn={this.state.loggedIn}/>
+                <MaterialNavBar loggedIn={this.state.loggedIn} isHome={false}/>
 
-                <br/><br/>
-                <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                    <Paper elevation={3} style={{width: '40vw', height: '22vh', minWidth: '400px', minHeight: '200px'}}> 
-                            <h1>{this.state.firstName}'s Canvas</h1>
-                            <Typography variant='body1'>Try making it your own. You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
+                <br/><br/><br/><br/>
+
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <Box
+                        style={{minWidth: '0', minHeight: '0'}}
+                        visibility='hidden'
+                        component={Grid}
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="right"
+                        justify="right"
+                        >
+                        <OutlinedCard style={{visibility: 'hidden'}} firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                    </Box>
+
+                    <Box
+                        component={Grid}
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justify="center"
+                        >
+                        <Paper elevation={3} style={{width: '40vw', height: '22vh', minWidth: '400px', minHeight: '150px'}}> 
+                            <Typography style={{margin: 50, marginBottom: 0}} variant='body1'>Try making it your own. You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
                             <br/>
-                            <Typography variant='body2'>Your changes are automatically saved.</Typography>
-                    </Paper>
+                            <Typography style={{margin: 50, marginTop: 0}} variant='body2'>Your changes are automatically saved.</Typography>
+                        </Paper>
+                    </Box>
+                    
+                    <Box
+                        component={Grid}
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="right"
+                        justify="right"
+                        >
+                        <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                    </Box>
                 </div>
-
 
                 <div className='canvas'>
 

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import ResponsiveNavigation from '../components/ResponsiveNavigation';
+
+import { makeStyles } from '@material-ui/core/styles';
+import MaterialNavBar from '../components/MaterialNavBar';
 
 class Home extends Component {
 
@@ -14,6 +16,18 @@ class Home extends Component {
 
             loggedIn: true
         }
+
+        this.useStyles = makeStyles((theme) => ({
+            root: {
+                flexGrow: 1,
+            },
+            menuButton: {
+                marginRight: theme.spacing(2),
+            },
+            title: {
+                flexGrow: 1,
+            },
+        }));
     }
 
     componentDidMount() {
@@ -28,6 +42,7 @@ class Home extends Component {
                     this.setState({loggedIn: false})
                 }
         });
+
     }
 
     sendLoginHash() {
@@ -69,13 +84,17 @@ class Home extends Component {
     }
 
     render () {
+
         return (
             <div>
-                <ResponsiveNavigation loggedIn={this.state.loggedIn}/>
-                <br/><br/>
+                <MaterialNavBar loggedIn={this.state.loggedIn} isHome={true}/>
+                <br/><br/><br/><br/><br/>
+                <div>
                 <h1>Home</h1>
                 <p>This is the home page. Insert information about Innovator's Canvas here.</p>
                 <p></p>
+                </div>
+                <script src='sketch.js'></script>
             </div>
         )
     }
