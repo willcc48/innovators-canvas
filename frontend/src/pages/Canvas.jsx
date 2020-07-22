@@ -1010,7 +1010,7 @@ class Canvas extends Component {
                             {this.getSearchText(this)}
                         </div>
 
-                        <div className="grid" id="grid">
+                        <div className="grid" id="grid" style={{width: '100%'}}>
                             <br/><br/>
                             <Spinner className='loader' color='lightgray' style={{textAlign: "center", visibility: this.state.searchLoaderVisibility}}/>
                             <br/>

@@ -142,6 +142,7 @@
 .image {
     width: 8vw;
     height: 11vh;
+    min-width: 100px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
