@@ -1092,11 +1092,14 @@ class Canvas extends Component {
                         alignItems="center"
                         justify="center"
                         >
-                        <Paper elevation={3} style={{width: '40vw', height: '22vh', minWidth: '400px', minHeight: '150px'}}> 
-                            <Typography style={{margin: 50, marginBottom: 0}} variant='body1'>Try making it your own. You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
+                        <Card elevation={3} > 
+                       
+                        <Typography style={{margin: 35, marginBottom: 0}} variant='h5'>Try making it your own.</Typography>
+                            <Typography style={{margin: 35, marginTop: 15, marginBottom: 0}} variant='body1'>You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
                             <br/>
-                            <Typography style={{margin: 50, marginTop: 0}} variant='body2'>Your changes are automatically saved.</Typography>
-                        </Paper>
+                            <Typography style={{margin: 35, marginTop: 0}} variant='body2'>Your changes are automatically saved.</Typography>
+                        
+                        </Card>
                     </Box>
                     
                     <Box
