@@ -156,11 +156,10 @@ export default function MaterialNavBar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem component={ Link }
-            to='/home'>
+      <MenuItem 
+            href='/home'>
         <Button
-            component={ Link }
-            to='/home'
+            href='/home'
             variant="outlined"
             color="primary"
             className={classes.button}
@@ -168,11 +167,9 @@ export default function MaterialNavBar(props) {
             Home
         </Button>
       </MenuItem>
-      <MenuItem component={ Link }
-            to='/canvas'>
+      <MenuItem href='/canvas'>
         <Button
-            component={ Link }
-            to='/canvas'
+            href='/canvas'
             variant="outlined"
             color="primary"
             className={classes.button}
@@ -199,23 +196,21 @@ export default function MaterialNavBar(props) {
         <Toolbar>
 
           <Typography className={classes.title} variant="h6" noWrap>
-            {props.isHome ? "Innovator's Canvas" : 'My Canvas'}
+            {props.title}
           </Typography>
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
             <IconButton color="inherit"
-            component={ Link }
-            to='/home'>
+            href='/home'>
               <Badge>
                 <Home />
               </Badge>
             </IconButton>
             
             <Button
-                component={ Link }
-                to='/canvas'
+                href='/canvas'
                 variant="contained"
                 color="primary"
                 className={classes.button}

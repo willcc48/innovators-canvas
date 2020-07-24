@@ -66,9 +66,10 @@ mongoose.connect(process.env.ATLAS_URI, { useUnifiedTopology: true, useNewUrlPar
 mongoose.connection.once('open', () => {
     console.log("MongoDB database connection established successfully");
 })
-const userSchema = new mongoose.Schema({ netid: String, firstName: String, lastName: String, stress: String, strengths: String, 
-                                         behaviors: String, energy: String, experience_bias: String, voice: String, values: String,
-                                         fixed_mindset: String, growth_mindset: String, vision: String, purpose: String, deliberate_practices: String });
+const userSchema = new mongoose.Schema({imgDrags: String,
+                                        netid: String, firstName: String, lastName: String, stress: String, strengths: String, 
+                                        behaviors: String, energy: String, experience_bias: String, voice: String, values: String,
+                                        fixed_mindset: String, growth_mindset: String, vision: String, purpose: String, deliberate_practices: String });
 const User = mongoose.model('User', userSchema);
 
 app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: {maxAge: 1000 * 60 * 60 * 24 * 7}}));
@@ -164,7 +165,7 @@ app.get('/userinfo', function(req, res, next) {
         var myquery = {netid : req.session.netid};
         User.findOne(myquery, function(err, user) {
             if(user==null) {
-                var my_user = new User({netid: req.session.netid, firstName: req.session.firstName, lastName: req.session.lastName,
+                var my_user = new User({imgDrags: '[]', netid: req.session.netid, firstName: req.session.firstName, lastName: req.session.lastName,
                     stress: '<h3>1. Stress</h3>', strengths: '<h3>2. Strengths</h3>', behaviors: '<h3>3. Behaviors</h3>', energy: '<h3>4. Energy</h3>',
                     experience_bias: '<h3>5. Experience Bias</h3>', voice: '<h3>6. Voice</h3>', values: '<h3>7. Values</h3>', fixed_mindset: '<h3>8. Fixed Mindset</h3>',
                     growth_mindset: '<h3>9. Growth Mindset</h3>', vision: '<h3>10. Vision</h3>', purpose: '<h3>11. Purpose</h3>',
@@ -172,14 +173,14 @@ app.get('/userinfo', function(req, res, next) {
     
                 my_user.save(function(err,result) {
                     User.findOne(myquery, function(err, user) {
-                        return res.json({netid: user.netid, firstName: user.firstName, lastName: user.lastName, stress: user.stress, strengths: user.strengths,
+                        return res.json({imgDrags: user.imgDrags, netid: user.netid, firstName: user.firstName, lastName: user.lastName, stress: user.stress, strengths: user.strengths,
                             behaviors: user.behaviors, energy: user.energy, experience_bias: user.experience_bias, voice: user.voice,
                             values: user.values, fixed_mindset: user.fixed_mindset, growth_mindset: user.growth_mindset, vision: user.vision,
                             purpose: user.purpose, deliberate_practices: user.deliberate_practices });
                     });
                 })
             } else {
-                return res.json({netid: user.netid, firstName: user.firstName, lastName: user.lastName, stress: user.stress, strengths: user.strengths,
+                return res.json({imgDrags: user.imgDrags, netid: user.netid, firstName: user.firstName, lastName: user.lastName, stress: user.stress, strengths: user.strengths,
                     behaviors: user.behaviors, energy: user.energy, experience_bias: user.experience_bias, voice: user.voice,
                     values: user.values, fixed_mindset: user.fixed_mindset, growth_mindset: user.growth_mindset, vision: user.vision,
                     purpose: user.purpose, deliberate_practices: user.deliberate_practices });
@@ -198,7 +199,7 @@ app.post('/canvas_data', async function(req, res) {
 
     var saved_res = res;
     var myquery = { netid: req.session.netid };
-    var newvalues = { $set: {stress: userData['stress'], strengths: userData['strengths'], behaviors: userData['behaviors'], energy: userData['energy'],
+    var newvalues = { $set: {imgDrags: userData['imgDrags'], stress: userData['stress'], strengths: userData['strengths'], behaviors: userData['behaviors'], energy: userData['energy'],
                              experience_bias: userData['experience_bias'], voice: userData['voice'], values: userData['values'], 
                              fixed_mindset: userData['fixed_mindset'], growth_mindset: userData['growth_mindset'], vision: userData['vision'],
                              purpose: userData['purpose'], deliberate_practices: userData['deliberate_practices']}};

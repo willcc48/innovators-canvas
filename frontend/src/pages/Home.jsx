@@ -87,7 +87,7 @@ class Home extends Component {
 
         return (
             <div>
-                <MaterialNavBar loggedIn={this.state.loggedIn} isHome={true}/>
+                <MaterialNavBar loggedIn={this.state.loggedIn} title="Innovator's Canvas"/>
                 <br/><br/><br/><br/><br/>
                 <div>
                 <h1>Home</h1>
