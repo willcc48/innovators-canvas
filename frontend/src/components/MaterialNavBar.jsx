@@ -14,7 +14,7 @@ import Home from '@material-ui/icons/Home';
 import Palette from '@material-ui/icons/Palette';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { Link } from "@reach/router";
 
@@ -204,13 +204,17 @@ export default function MaterialNavBar(props) {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
+
+          <Tooltip title='Home'>
             <IconButton color="inherit"
             href='/home'>
               <Badge>
                 <Home />
               </Badge>
             </IconButton>
-            
+            </Tooltip>
+
+            <Tooltip title='Canvas'>
             <Button
                 href='/canvas'
                 variant="contained"
@@ -219,7 +223,9 @@ export default function MaterialNavBar(props) {
                 startIcon={<Palette />}>
                 Canvas
             </Button>
-    
+            </Tooltip>
+
+            <Tooltip title='Profile'>
             <IconButton
               edge="end"
               aria-controls={menuId}
@@ -229,20 +235,40 @@ export default function MaterialNavBar(props) {
             >
               <AccountCircle />
             </IconButton>
-
+            </Tooltip>
+            
           </div>
 
           <div className={classes.sectionMobile}>
 
+            <Tooltip title='Home'>
+            <IconButton color="inherit"
+            href='/home'>
+              <Badge>
+                <Home />
+              </Badge>
+            </IconButton>
+            </Tooltip>
+
+            <Tooltip title='Canvas'>
             <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
+                href='/canvas'
+                color="inherit">
+                <Palette />
+            </IconButton>
+            </Tooltip>
+
+            <Tooltip title='Profile'>
+            <IconButton
+              edge="end"
+              aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <AccountCircle />
             </IconButton>
+            </Tooltip>
 
           </div>
         </Toolbar>
