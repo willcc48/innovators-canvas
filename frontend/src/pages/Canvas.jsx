@@ -491,58 +491,61 @@ class Canvas extends Component {
     loopAndUpdatePositions(id, dragMap) {
         if(dragMap != null) {
             for(var value of dragMap.values()) {
-                var offsetX, offsetY;
+                var offsetX = 0, offsetY = 0;
                 var xDensity = value.xDensity, yDensity = value.yDensity;
-                switch(id) {
-                    case 'stress':
-                        offsetX = this.col1DivRef.current.offsetLeft;
-                        offsetY = this.col1DivRef.current.offsetTop;
-                        break;
-                    case 'strengths':
-                        offsetX = this.col5DivRef.current.offsetLeft;
-                        offsetY = this.col5DivRef.current.offsetTop;
-                        break;
-                    case 'behaviors':
-                        offsetX = this.col1DivRef.current.offsetLeft;
-                        offsetY = this.col1DivRef.current.offsetTop + this.col1DivRef.current.offsetHeight / 2;
-                        break;
-                    case 'energy':
-                        offsetX = this.col5DivRef.current.offsetLeft;
-                        offsetY = this.col5DivRef.current.offsetTop + this.col5DivRef.current.offsetHeight / 2;
-                        break;
-                    case 'experience_bias':
-                        offsetX = this.col2DivRef.current.offsetLeft;
-                        offsetY = this.col2DivRef.current.offsetTop;
-                        break;
-                    case 'voice':
-                        offsetX = this.col4DivRef.current.offsetLeft;
-                        offsetY = this.col4DivRef.current.offsetTop;
-                        break;
-                    case 'values':
-                        offsetX = this.bottomDivRef.current.offsetLeft;
-                        offsetY = this.bottomDivRef.current.offsetTop;
-                        break;
-                    case 'fixed_mindset':
-                        offsetX = this.col1DivRef.current.offsetLeft;
-                        offsetY = this.bottomDivRef.current.offsetTop;
-                        break;
-                    case 'growth_mindset':
-                        offsetX = this.col4DivRef.current.offsetLeft;
-                        offsetY = this.bottomDivRef.current.offsetTop;
-                        break;
-                    case 'vision':
-                        offsetX = this.topDivRef.current.offsetLeft;
-                        offsetY = this.topDivRef.current.offsetTop;
-                        break;
-                    case 'purpose':
-                        offsetX = this.col3DivRef.current.offsetLeft;
-                        offsetY = this.col1DivRef.current.offsetTop + this.col3DivRef.current.offsetHeight / 2;
-                        break;
-                    case 'deliberate_practices':
-                        offsetX = this.col3DivRef.current.offsetLeft;
-                        offsetY = this.col3DivRef.current.offsetTop;
-                        break;
-                    default:
+                
+                if(!isMobile) {
+                    switch(id) {
+                        case 'stress':
+                            offsetX = this.col1DivRef.current.offsetLeft;
+                            offsetY = this.col1DivRef.current.offsetTop;
+                            break;
+                        case 'strengths':
+                            offsetX = this.col5DivRef.current.offsetLeft;
+                            offsetY = this.col5DivRef.current.offsetTop;
+                            break;
+                        case 'behaviors':
+                            offsetX = this.col1DivRef.current.offsetLeft;
+                            offsetY = this.col1DivRef.current.offsetTop + this.col1DivRef.current.offsetHeight / 2;
+                            break;
+                        case 'energy':
+                            offsetX = this.col5DivRef.current.offsetLeft;
+                            offsetY = this.col5DivRef.current.offsetTop + this.col5DivRef.current.offsetHeight / 2;
+                            break;
+                        case 'experience_bias':
+                            offsetX = this.col2DivRef.current.offsetLeft;
+                            offsetY = this.col2DivRef.current.offsetTop;
+                            break;
+                        case 'voice':
+                            offsetX = this.col4DivRef.current.offsetLeft;
+                            offsetY = this.col4DivRef.current.offsetTop;
+                            break;
+                        case 'values':
+                            offsetX = this.bottomDivRef.current.offsetLeft;
+                            offsetY = this.bottomDivRef.current.offsetTop;
+                            break;
+                        case 'fixed_mindset':
+                            offsetX = this.col1DivRef.current.offsetLeft;
+                            offsetY = this.bottomDivRef.current.offsetTop;
+                            break;
+                        case 'growth_mindset':
+                            offsetX = this.col4DivRef.current.offsetLeft;
+                            offsetY = this.bottomDivRef.current.offsetTop;
+                            break;
+                        case 'vision':
+                            offsetX = this.topDivRef.current.offsetLeft;
+                            offsetY = this.topDivRef.current.offsetTop;
+                            break;
+                        case 'purpose':
+                            offsetX = this.col3DivRef.current.offsetLeft;
+                            offsetY = this.col1DivRef.current.offsetTop + this.col3DivRef.current.offsetHeight / 2;
+                            break;
+                        case 'deliberate_practices':
+                            offsetX = this.col3DivRef.current.offsetLeft;
+                            offsetY = this.col3DivRef.current.offsetTop;
+                            break;
+                        default:
+                    }
                 }
                 
                 value.rndRef.updatePosition({ x: (xDensity * window.innerWidth)+offsetX, y: (yDensity * window.innerHeight)+offsetY });

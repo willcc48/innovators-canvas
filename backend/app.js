@@ -12,21 +12,6 @@ var session = require('express-session');
 const http = require('http');
 var open = require('open');
 var cors = require('cors');
-const multer = require('multer');
-
-const multerStorage = multer.memoryStorage();
-
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, '/uploads/');
-    },
-
-    // By default, multer removes file extensions so let's add them back
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
-
 require('dotenv').config();
 
 var login_url = 'https://oauth.oit.duke.edu/oauth/authorize.php?response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A9000&client_id=innovators-canvas&scope=basic&state=1129&client_secret=2nA!QE=qgr73rUlKgvkjX!k4foCg!W#4KP*co4tSVgYVxHz*qd';
@@ -34,7 +19,6 @@ var logout_url = 'https://oauth.oit.duke.edu/Shibboleth.sso/Logout?return=https:
 
 var app = express();
 const mongoose = require('mongoose');
-const { response } = require('express');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
