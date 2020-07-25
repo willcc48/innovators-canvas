@@ -1562,61 +1562,12 @@ class Canvas extends Component {
                     <br/>
                     <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
                     <br/>
-
-                        <MenuProvider id='vision_context' >
-                            <this.visionContext />
-                            <div className='section__mobile' >
-                                {this.getTextCard(this.state.vision, 'vision')}        
-                                { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }                         
-                            </div>
-                        </MenuProvider>
-
                     
                         <MenuProvider id='stress_context' >
                             <this.stressContext />
                             <div className='section__mobile' style={{borderBottom: 0, borderTop: 0}} >
                                 {this.getTextCard(this.state.stress, 'stress')} 
                                 { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
-
-                        <MenuProvider id='behaviors_context' >
-                            <this.behaviorsContext />
-                            <div className='section__mobile' style={{zIndex: 10}}>
-                                {this.getTextCard(this.state.behaviors, 'behaviors')} 
-                                { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
-
-                        <MenuProvider id='experience_bias_context' >
-                            <this.expBiasContext />
-                            <div className='section__mobile' style={{borderTop: 0}}>
-                                {this.getTextCard(this.state.experience_bias, 'experience_bias')}
-                                { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
-
-                        <MenuProvider id='deliberate_practices_context' >
-                            <this.delibPracticesContext />
-                            <div className='section__mobile' style={{borderTop: 0}}>
-                                {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
-                                { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
-
-                        <MenuProvider id='purpose_context' >
-                            <this.purposeContext />
-                            <div className='section__mobile' style={{borderTop: 0}}>
-                                {this.getTextCard(this.state.purpose, 'purpose')}
-                                { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
-
-                        <MenuProvider id='voice_context' >
-                            <this.voiceContext />
-                            <div className='section__mobile' style={{borderTop: 0}}>
-                                {this.getTextCard(this.state.voice, 'voice')}
-                                { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
 
@@ -1628,6 +1579,14 @@ class Canvas extends Component {
                             </div>
                         </MenuProvider>
 
+                        <MenuProvider id='behaviors_context' >
+                            <this.behaviorsContext />
+                            <div className='section__mobile' style={{zIndex: 10}}>
+                                {this.getTextCard(this.state.behaviors, 'behaviors')} 
+                                { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
                         <MenuProvider id='energy_context' >
                             <this.energyContext />
                             <div className='section__mobile' style={{borderBottom: 0}}>
@@ -1636,21 +1595,35 @@ class Canvas extends Component {
                             </div>
                         </MenuProvider>
 
-
-                        <MenuProvider id='fixed_mindset_context' >
-                            <this.fixedMindsetContext />
-                            <div className='section__mobile' >
-                                {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
-                                { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                        <MenuProvider id='experience_bias_context' >
+                            <this.expBiasContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.experience_bias, 'experience_bias')}
+                                { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
 
+                        <MenuProvider id='voice_context' >
+                            <this.voiceContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.voice, 'voice')}
+                                { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
 
                         <MenuProvider id='values_context' >
                             <this.valuesContext />
                             <div className='section__mobile' style={{ borderTop: 0 }}>
                                 {this.getTextCard(this.state.values, 'values')}
                                 { [...this.state.valuesDragObj.values()].map((img, index) => [...this.state.valuesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+                        
+                        <MenuProvider id='fixed_mindset_context' >
+                            <this.fixedMindsetContext />
+                            <div className='section__mobile' >
+                                {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
+                                { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
 
@@ -1661,6 +1634,33 @@ class Canvas extends Component {
                                 { [...this.state.growthMindsetDragObj.values()].map((img, index) => [...this.state.growthMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
+
+                        <MenuProvider id='vision_context' >
+                            <this.visionContext />
+                            <div className='section__mobile' >
+                                {this.getTextCard(this.state.vision, 'vision')}        
+                                { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }                         
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='purpose_context' >
+                            <this.purposeContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.purpose, 'purpose')}
+                                { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+
+                        <MenuProvider id='deliberate_practices_context' >
+                            <this.delibPracticesContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
+                                { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+
 
                     <br/>
                 </div>
