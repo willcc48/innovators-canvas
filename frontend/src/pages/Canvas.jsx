@@ -1552,7 +1552,7 @@ class Canvas extends Component {
                         container
                         spacing={0}
                         direction="column"
-                        style={{marginRight: 40}}
+                        style={{marginRight: 20}}
                         >
                         <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
                     </Box>
