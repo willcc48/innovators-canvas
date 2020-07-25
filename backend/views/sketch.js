@@ -3,7 +3,6 @@ function setup() {
 }
 
 function preload() {
-  font1 = loadFont('CarroisGothicSC-Regular.ttf');
 }
 
 function draw() {
@@ -116,7 +115,6 @@ function grid() {
 }
 
 function text1() {
-  textFont(font1);
   fill(0);
   strokeWeight(1);
   textSize(40);
@@ -168,7 +166,6 @@ function box1Show() {
     }
     rect(1075, 75, 50, 50, 0, 20, 0, 0 );
     
-    textFont(font1);
     fill(0);
     strokeWeight(1);
     textSize(60);

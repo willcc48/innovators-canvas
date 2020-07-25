@@ -9,6 +9,25 @@
     position: relative;
 }
 
+.canvas__mobile {
+    width:75vw;
+    display: flex;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+    position: relative;
+}
+
+.section__mobile {
+    width: 75vw;
+    height: 70vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
 .canvas__top {
     width:75vw;
     height: 30vh;

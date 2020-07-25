@@ -147,6 +147,7 @@ export default function MaterialNavBar(props) {
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
+    
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -156,6 +157,7 @@ export default function MaterialNavBar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+
       <MenuItem 
             href='/home'>
         <Button

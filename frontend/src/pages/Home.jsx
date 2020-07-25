@@ -28,9 +28,28 @@ class Home extends Component {
                 flexGrow: 1,
             },
         }));
+
+        this.divRef = React.createRef()
     }
 
     componentDidMount() {
+        const script1 = document.createElement("script");
+        const script2 = document.createElement("script");
+        const script3 = document.createElement("script");
+        script1.src = "http://localhost:9000/p5.js";
+        script1.async = true;
+        script1.type = "text/javascript"
+        script2.src = "http://localhost:9000/p5.sound.min.js";
+        script2.async = true;
+        script2.type = "text/javascript"
+        script3.src = "http://localhost:9000/sketch.js";
+        script3.async = true;
+        
+        this.divRef.current.appendChild(script1);
+        this.divRef.current.appendChild(script2);
+        this.divRef.current.appendChild(script3);
+
+
         this.sendLoginHash();
         axios.get('http://localhost:9000/userinfo', {withCredentials: true})
             .then(res => {
@@ -90,11 +109,11 @@ class Home extends Component {
                 <MaterialNavBar loggedIn={this.state.loggedIn} title="Innovator's Canvas"/>
                 <br/><br/><br/><br/><br/>
                 <div>
-                <h1>Home</h1>
-                <p>This is the home page. Insert information about Innovator's Canvas here.</p>
-                <p></p>
+                    <h1>Home</h1>
+                    <p>This is the home page. Insert information about Innovator's Canvas here.</p>
                 </div>
-                <script src='sketch.js'></script>
+
+                <div ref={this.divRef}/>
             </div>
         )
     }

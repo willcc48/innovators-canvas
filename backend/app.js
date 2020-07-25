@@ -226,6 +226,19 @@ app.post('/', function(req, res) {
 
 app.use(express.static("views"));
 
+app.get('p5.js', function(req, res, next) {
+    console.log(__dirname);
+    res.sendFile(path.join(__dirname+'/views/p5.js'));
+});
+
+app.get('p5.sound.min.js', function(req, res, next) {
+    res.sendFile(path.join(__dirname+'/views/p5.sound.min.js'));
+});
+
+app.get('sketch.js', function(req, res, next) {
+    res.sendFile(path.join(__dirname+'/views/sketch.js'));
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));

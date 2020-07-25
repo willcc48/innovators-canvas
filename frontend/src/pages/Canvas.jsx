@@ -8,7 +8,7 @@ import { Rnd } from "react-rnd";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import BalloonEditor from 'custom-williams-block-build/build/ckeditor';
 import TextareaAutosize from 'react-autosize-textarea';
-
+import {isMobile} from 'react-device-detect';
 import { Link } from "@reach/router";
 
 import Button from '@material-ui/core/Button';
@@ -1257,6 +1257,10 @@ class Canvas extends Component {
             );
         }
         
+        if(isMobile) {
+            return (this.getMobileLayout());
+        }
+
         return (
             <div style={{visibility: this.state.canvasVisible}}>
                 <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.isDialogOpen}>
@@ -1470,7 +1474,191 @@ class Canvas extends Component {
                 </div>
                     
                 <br/>
+            </div>
+        )
+    }
 
+    getMobileLayout() {
+        return (
+            <div>
+                <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.isDialogOpen}>
+                    {this.getSearchHeader()}
+                    <DialogContent>
+
+                        <div style={{height: '25px'}}>
+                            {this.getSearchText(this)}
+                        </div>
+
+                        <div className="grid" id="grid" style={{width: '100%'}}>
+                            <br/><br/>
+                            <LinearProgress color="secondary" style={{textAlign: "center", visibility: this.state.searchLoaderVisibility}}/>
+                            <br/>
+                                <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
+                                    <div className="image"><button id="img1" style={{backgroundImage: 'url('+this.state.searchImgList[0]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                    <div style={{width: '5px'}}></div>
+                                    <div className="image"><button id="img2" style={{backgroundImage: 'url('+this.state.searchImgList[1]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                    <div style={{width: '5px'}}></div>
+                                    <div className="image"><button id="img3" style={{backgroundImage: 'url('+this.state.searchImgList[2]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                </div>
+                                <div style={{height: '5px'}}></div>
+                                <div className="grid" style={{display: 'flex', flexDirection: 'row'}}>
+                                    <div className="image"><button id="img4" style={{backgroundImage: 'url('+this.state.searchImgList[3]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                    <div style={{width: '5px'}}></div>
+                                    <div className="image"><button id="img5" style={{backgroundImage: 'url('+this.state.searchImgList[4]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                    <div style={{width: '5px'}}></div>
+                                    <div className="image"><button id="img6" style={{backgroundImage: 'url('+this.state.searchImgList[5]+')'}} className="img__button__search" onClick={e => this.addImgDrag(e.target)}/></div>
+                                </div>
+                        </div>
+
+                        <br/>
+
+                        <DialogContentText color="textSecondary" style={{visibility: this.state.noResults}}>No results for your search.</DialogContentText>
+                        
+                        <Button variant="outlined" color="primary" onClick={this.handleClose}>Close</Button>
+                    </DialogContent>
+                </Dialog>
+
+                <MaterialNavBar loggedIn={this.state.loggedIn} title='My Canvas'/>
+
+                <br/><br/><br/><br/>
+
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+
+                    <Box
+                        component={Grid}
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justify="center"
+                        style={{marginLeft: 20, maxWidth: 300}}
+                        >
+                        <Card elevation={3} > 
+                    
+                        <Typography style={{margin: 10, marginBottom: 0}} variant='h6'>Try making it your own.</Typography>
+                            <Typography style={{margin: 10, marginTop: 5, marginBottom: 0}} variant='body1'>You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
+                            <br/>
+                            <Typography style={{margin: 10, marginTop: 0}} color="textSecondary" variant='body2'>Your changes are automatically saved.</Typography>
+                        
+                        </Card>
+                    </Box>
+                    
+                    <Box
+                        component={Grid}
+                        container
+                        spacing={0}
+                        direction="column"
+                        >
+                        <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                    </Box>
+                </div>
+
+                <div className='canvas__mobile'>
+                    <br/>
+                    <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
+                    <br/>
+
+                        <MenuProvider id='vision_context' >
+                            <this.visionContext />
+                            <div className='section__mobile' >
+                                {this.getTextCard(this.state.vision, 'vision')}        
+                                { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }                         
+                            </div>
+                        </MenuProvider>
+
+                    
+                        <MenuProvider id='stress_context' >
+                            <this.stressContext />
+                            <div className='section__mobile' style={{borderBottom: 0, borderTop: 0}} >
+                                {this.getTextCard(this.state.stress, 'stress')} 
+                                { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='behaviors_context' >
+                            <this.behaviorsContext />
+                            <div className='section__mobile' style={{zIndex: 10}}>
+                                {this.getTextCard(this.state.behaviors, 'behaviors')} 
+                                { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='experience_bias_context' >
+                            <this.expBiasContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.experience_bias, 'experience_bias')}
+                                { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='deliberate_practices_context' >
+                            <this.delibPracticesContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
+                                { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='purpose_context' >
+                            <this.purposeContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.purpose, 'purpose')}
+                                { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='voice_context' >
+                            <this.voiceContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.voice, 'voice')}
+                                { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='strengths_context' >
+                            <this.strengthsContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.strengths, 'strengths')} 
+                                { [...this.state.strengthsDragObj.values()].map((img, index) => [...this.state.strengthsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='energy_context' >
+                            <this.energyContext />
+                            <div className='section__mobile' style={{borderBottom: 0}}>
+                                {this.getTextCard(this.state.energy, 'energy')}
+                                { [...this.state.energyDragObj.values()].map((img, index) => [...this.state.energyDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+
+                        <MenuProvider id='fixed_mindset_context' >
+                            <this.fixedMindsetContext />
+                            <div className='section__mobile' >
+                                {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
+                                { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+
+                        <MenuProvider id='values_context' >
+                            <this.valuesContext />
+                            <div className='section__mobile' style={{ borderTop: 0 }}>
+                                {this.getTextCard(this.state.values, 'values')}
+                                { [...this.state.valuesDragObj.values()].map((img, index) => [...this.state.valuesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                        <MenuProvider id='growth_mindset_context' >
+                            <this.growthMindsetContext />
+                            <div className='section__mobile' style={{borderTop: 0}}>
+                                {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
+                                { [...this.state.growthMindsetDragObj.values()].map((img, index) => [...this.state.growthMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
+                            </div>
+                        </MenuProvider>
+
+                    <br/>
+                </div>
             </div>
         )
     }
