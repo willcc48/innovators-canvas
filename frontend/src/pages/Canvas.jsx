@@ -1565,10 +1565,10 @@ class Canvas extends Component {
                     
                         <MenuProvider id='stress_context' >
                             <this.stressContext />
-                            <Card className='section__mobile'  >
+                            <OutlinedCard className='section__mobile'  >
                                 {this.getTextCard(this.state.stress, 'stress')} 
                                 { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </Card>
+                            </OutlinedCard>
                         </MenuProvider>
                         <br/><br/>
                         <MenuProvider id='strengths_context' >
