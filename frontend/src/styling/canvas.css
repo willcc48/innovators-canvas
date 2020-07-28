@@ -105,6 +105,68 @@
     box-sizing: border-box;
 }
 
+
+.col__long__mobile {
+    width: 45vw;
+    height: 70vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.col__short__mobile {
+    width: 45vw;
+    height: 35vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.col__short__short__mobile {
+    width: 45vw;
+    height: 35vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row__short__mobile {
+    width: 30vw;
+    height: 30vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row__long__mobile {
+    width: 75vw;
+    height: 30vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 .handle {
     margin-top: 0;
     margin-bottom: 0;

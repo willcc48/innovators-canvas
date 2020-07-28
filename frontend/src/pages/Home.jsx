@@ -33,6 +33,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
+/*
         const script1 = document.createElement("script");
         const script2 = document.createElement("script");
         const script3 = document.createElement("script");
@@ -48,7 +49,7 @@ class Home extends Component {
         this.divRef.current.appendChild(script1);
         this.divRef.current.appendChild(script2);
         this.divRef.current.appendChild(script3);
-
+*/
 
         this.sendLoginHash();
         axios.get('http://localhost:9000/userinfo', {withCredentials: true})

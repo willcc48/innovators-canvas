@@ -91,6 +91,19 @@ class Canvas extends Component {
         this.col5DivRef = React.createRef();
         this.bottomDivRef = React.createRef();
 
+        this.row1DivRef = React.createRef();
+        this.row2DivRef = React.createRef();
+        this.row3DivRef = React.createRef();
+        this.row4DivRef = React.createRef();
+        this.row5DivRef = React.createRef();
+        this.row6DivRef = React.createRef();
+        this.row7DivRef = React.createRef();
+        this.row8DivRef = React.createRef();
+        this.row9DivRef = React.createRef();
+        this.row10DivRef = React.createRef();
+        this.row11DivRef = React.createRef();
+        this.row12DivRef = React.createRef();
+        
         this.dragIndex = 0;
         this.focusedId = -1;
         this.setImgBlur = this.setImgBlur.bind(this);
@@ -105,22 +118,39 @@ class Canvas extends Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.pressedEnter = false;
 
-        this.editorConfiguration = {
-            toolbar: [
-                'undo',
-                'redo',
-                '|',
-                'bold',
-                'italic',
-                'bulletedList',
-                'numberedList',
-                '|',
-                'fontSize',
-                'fontFamily',
-                '|',
-                'heading',
-            ]
-        };
+
+        if(!isMobile) {
+            this.editorConfiguration = {
+                toolbar: [
+                    'undo',
+                    'redo',
+                    '|',
+                    'bold',
+                    'italic',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    'fontSize',
+                    'fontFamily',
+                    '|',
+                    'heading',
+                ]
+            };
+        } else {
+            this.editorConfiguration = {
+                toolbar: [
+                    'bold',
+                    'italic',
+                    'bulletedList',
+                    '|',
+                    'fontSize',
+                    'fontFamily',
+                    '|',
+                    'heading',
+                ]
+            };
+        }
+        
 
         this.handleClickOpen = (id, gif) => {
             this.setState({
@@ -422,43 +452,91 @@ class Canvas extends Component {
     }
 
     constructDragDBArray(id) {
-        var dragArray;
+        var dragArray, secWidth=0, secHeight=0;
         switch(id) {
             case 'stress':
                 dragArray = [...this.state.stressDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row1DivRef.current.offsetWidth;
+                    secHeight = this.row1DivRef.current.offsetHeight;
+                }
                 break;
             case 'strengths':
                 dragArray = [...this.state.strengthsDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row2DivRef.current.offsetWidth;
+                    secHeight = this.row2DivRef.current.offsetHeight;
+                }
                 break;
             case 'behaviors':
                 dragArray = [...this.state.behaviorsDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row3DivRef.current.offsetWidth;
+                    secHeight = this.row3DivRef.current.offsetHeight;
+                }
                 break;
             case 'energy':
                 dragArray = [...this.state.energyDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row4DivRef.current.offsetWidth;
+                    secHeight = this.row4DivRef.current.offsetHeight;
+                }
                 break;
             case 'experience_bias':
                 dragArray = [...this.state.expBiasDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row5DivRef.current.offsetWidth;
+                    secHeight = this.row5DivRef.current.offsetHeight;
+                }
                 break;
             case 'voice':
                 dragArray = [...this.state.voiceDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row6DivRef.current.offsetWidth;
+                    secHeight = this.row6DivRef.current.offsetHeight;
+                }
                 break;
             case 'values':
                 dragArray = [...this.state.valuesDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row7DivRef.current.offsetWidth;
+                    secHeight = this.row7DivRef.current.offsetHeight;
+                }
                 break;
             case 'fixed_mindset':
                 dragArray = [...this.state.fixedMindsetDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row8DivRef.current.offsetWidth;
+                    secHeight = this.row8DivRef.current.offsetHeight;
+                }
                 break;
             case 'growth_mindset':
                 dragArray = [...this.state.growthMindsetDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row9DivRef.current.offsetWidth;
+                    secHeight = this.row9DivRef.current.offsetHeight;
+                }
                 break;
             case 'vision':
                 dragArray = [...this.state.visionDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row10DivRef.current.offsetWidth;
+                    secHeight = this.row10DivRef.current.offsetHeight;
+                }
                 break;
             case 'purpose':
                 dragArray = [...this.state.purposeDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row11DivRef.current.offsetWidth;
+                    secHeight = this.row11DivRef.current.offsetHeight;
+                }
                 break;
             case 'deliberate_practices':
                 dragArray = [...this.state.delibPracticesDragObj.values()];
+                if(isMobile) {
+                    secWidth = this.row12DivRef.current.offsetWidth;
+                    secHeight = this.row12DivRef.current.offsetHeight;
+                }
                 break;
             default:
         }
@@ -467,7 +545,7 @@ class Canvas extends Component {
         for(var i=0; i<dragArray.length; i++) {
             if(dragArray[i].visible) {
                 ret.push({section: id, imgSrc: dragArray[i].imgSrc, xDensity: dragArray[i].xDensity, yDensity: dragArray[i].yDensity,
-                                width: dragArray[i].width, height: dragArray[i].height, meaningText: dragArray[i].meaningText});
+                    width: dragArray[i].width, height: dragArray[i].height, meaningText: dragArray[i].meaningText, mobile: isMobile, sectionWidth: secWidth, sectionHeight: secHeight, browserWidth: window.innerWidth, browserHeight: window.innerHeight});
             }
         }
         return ret;
@@ -489,63 +567,61 @@ class Canvas extends Component {
     }
 
     loopAndUpdatePositions(id, dragMap) {
-        if(dragMap != null) {
+        if(dragMap != null && !isMobile) {
             for(var value of dragMap.values()) {
                 var offsetX = 0, offsetY = 0;
                 var xDensity = value.xDensity, yDensity = value.yDensity;
                 
-                if(!isMobile) {
-                    switch(id) {
-                        case 'stress':
-                            offsetX = this.col1DivRef.current.offsetLeft;
-                            offsetY = this.col1DivRef.current.offsetTop;
-                            break;
-                        case 'strengths':
-                            offsetX = this.col5DivRef.current.offsetLeft;
-                            offsetY = this.col5DivRef.current.offsetTop;
-                            break;
-                        case 'behaviors':
-                            offsetX = this.col1DivRef.current.offsetLeft;
-                            offsetY = this.col1DivRef.current.offsetTop + this.col1DivRef.current.offsetHeight / 2;
-                            break;
-                        case 'energy':
-                            offsetX = this.col5DivRef.current.offsetLeft;
-                            offsetY = this.col5DivRef.current.offsetTop + this.col5DivRef.current.offsetHeight / 2;
-                            break;
-                        case 'experience_bias':
-                            offsetX = this.col2DivRef.current.offsetLeft;
-                            offsetY = this.col2DivRef.current.offsetTop;
-                            break;
-                        case 'voice':
-                            offsetX = this.col4DivRef.current.offsetLeft;
-                            offsetY = this.col4DivRef.current.offsetTop;
-                            break;
-                        case 'values':
-                            offsetX = this.bottomDivRef.current.offsetLeft;
-                            offsetY = this.bottomDivRef.current.offsetTop;
-                            break;
-                        case 'fixed_mindset':
-                            offsetX = this.col1DivRef.current.offsetLeft;
-                            offsetY = this.bottomDivRef.current.offsetTop;
-                            break;
-                        case 'growth_mindset':
-                            offsetX = this.col4DivRef.current.offsetLeft;
-                            offsetY = this.bottomDivRef.current.offsetTop;
-                            break;
-                        case 'vision':
-                            offsetX = this.topDivRef.current.offsetLeft;
-                            offsetY = this.topDivRef.current.offsetTop;
-                            break;
-                        case 'purpose':
-                            offsetX = this.col3DivRef.current.offsetLeft;
-                            offsetY = this.col1DivRef.current.offsetTop + this.col3DivRef.current.offsetHeight / 2;
-                            break;
-                        case 'deliberate_practices':
-                            offsetX = this.col3DivRef.current.offsetLeft;
-                            offsetY = this.col3DivRef.current.offsetTop;
-                            break;
-                        default:
-                    }
+                switch(id) {
+                    case 'stress':
+                        offsetX = this.col1DivRef.current.offsetLeft;
+                        offsetY = this.col1DivRef.current.offsetTop;
+                        break;
+                    case 'strengths':
+                        offsetX = this.col5DivRef.current.offsetLeft;
+                        offsetY = this.col5DivRef.current.offsetTop;
+                        break;
+                    case 'behaviors':
+                        offsetX = this.col1DivRef.current.offsetLeft;
+                        offsetY = this.col1DivRef.current.offsetTop + this.col1DivRef.current.offsetHeight / 2;
+                        break;
+                    case 'energy':
+                        offsetX = this.col5DivRef.current.offsetLeft;
+                        offsetY = this.col5DivRef.current.offsetTop + this.col5DivRef.current.offsetHeight / 2;
+                        break;
+                    case 'experience_bias':
+                        offsetX = this.col2DivRef.current.offsetLeft;
+                        offsetY = this.col2DivRef.current.offsetTop;
+                        break;
+                    case 'voice':
+                        offsetX = this.col4DivRef.current.offsetLeft;
+                        offsetY = this.col4DivRef.current.offsetTop;
+                        break;
+                    case 'values':
+                        offsetX = this.bottomDivRef.current.offsetLeft;
+                        offsetY = this.bottomDivRef.current.offsetTop;
+                        break;
+                    case 'fixed_mindset':
+                        offsetX = this.col1DivRef.current.offsetLeft;
+                        offsetY = this.bottomDivRef.current.offsetTop;
+                        break;
+                    case 'growth_mindset':
+                        offsetX = this.col4DivRef.current.offsetLeft;
+                        offsetY = this.bottomDivRef.current.offsetTop;
+                        break;
+                    case 'vision':
+                        offsetX = this.topDivRef.current.offsetLeft;
+                        offsetY = this.topDivRef.current.offsetTop;
+                        break;
+                    case 'purpose':
+                        offsetX = this.col3DivRef.current.offsetLeft;
+                        offsetY = this.col1DivRef.current.offsetTop + this.col3DivRef.current.offsetHeight / 2;
+                        break;
+                    case 'deliberate_practices':
+                        offsetX = this.col3DivRef.current.offsetLeft;
+                        offsetY = this.col3DivRef.current.offsetTop;
+                        break;
+                    default:
                 }
                 
                 value.rndRef.updatePosition({ x: (xDensity * window.innerWidth)+offsetX, y: (yDensity * window.innerHeight)+offsetY });
@@ -557,7 +633,59 @@ class Canvas extends Component {
         for(var i=0; i<imgDrags.length; i++) {
             var img = imgDrags[i];
             var map;
-            var imgObj = this.getImgDragComp(0, img.section, this.dragIndex, img.imgSrc, img.xDensity, img.yDensity, img.width, img.height, img.meaningText);
+            var xDens = img.xDensity, yDens = img.yDensity, width = img.width, height = img.height;
+            if(img.mobile && !isMobile) {
+                width = parseInt(width.split('v')[0]);
+                height = parseInt(height.split('v')[0]);
+                switch(img.section) {
+                    case 'stress':
+                        console.log(xDens, yDens, width, height);
+                        
+                        xDens /= 3;
+                        width = ((width * (img.browserWidth/100)) / img.sectionWidth) * this.col1DivRef.current.offsetWidth * 2;//* window.innerWidth / img.browserWidth;
+                        height = ((height * (img.browserHeight/100)) / img.sectionHeight) * this.col1DivRef.current.offsetHeight/2;// * window.innerHeight / img.browserHeight;
+                        break;
+                    case 'strengths':
+                        
+                        break;
+                    case 'behaviors':
+                        
+                        break;
+                    case 'energy':
+                        
+                        break;
+                    case 'experience_bias':
+                        
+                        break;
+                    case 'voice':
+                        
+                        break;
+                    case 'values':
+                        
+                        break;
+                    case 'fixed_mindset':
+                        
+                        break;
+                    case 'growth_mindset':
+                        
+                        break;
+                    case 'vision':
+                        
+                        break;
+                    case 'purpose':
+                        
+                        break;
+                    case 'deliberate_practices':
+                        
+                        break;
+                    default:
+                }
+                console.log(width, height);
+            }
+            else if(!img.mobile && isMobile) {
+
+            }
+            var imgObj = this.getImgDragComp(0, img.section, this.dragIndex, img.imgSrc, xDens, yDens, width, height, img.meaningText);
             switch(img.section) {
                 case 'stress':
                     map = this.state.stressDragObj;
@@ -621,7 +749,7 @@ class Canvas extends Component {
                     break;
                 default:            
             }
-    
+
             this.dragIndex++;
         }
     }
@@ -630,7 +758,12 @@ class Canvas extends Component {
         var src;
         if(!reconstructedSrc && this.state.searchImgList[i] !== 'null') {
             src = this.state.searchImgList[i];
+            if(isMobile) {
+                defWidth = '27vw';
+                defHeight = '12vh'
+            }
         } else { src = reconstructedSrc; }
+        
         var imgObj = { visible: true, imgSrc: src, dragComp: null, xDensity: defXDensity, yDensity: defYDensity, width: defWidth, height: defHeight, meaningText: defMeaningText, rndRef: null};
 
         imgObj.dragComp = (
@@ -1524,37 +1657,31 @@ class Canvas extends Component {
 
                 <MaterialNavBar loggedIn={this.state.loggedIn} title='My Canvas'/>
 
-                <br/><br/><br/><br/>
+                <br/><br/><br/><br/><br/>
 
                 <div style={{display: 'flex', flexDirection: 'row'}}>
 
-                    <Box
-                        component={Grid}
-                        container
-                        spacing={0}
-                        direction="column"
-                        alignItems="center"
-                        justify="center"
-                        style={{marginLeft: 20, maxWidth: 300}}
-                        >
-                        <Card elevation={3} > 
+                    <Box 
+                        style={{marginLeft: 20, marginRight: 20}}
+                        display='flex' >
                     
-                        <Typography style={{margin: 10, marginBottom: 0}} variant='h6'>Try making it your own.</Typography>
-                            <Typography style={{margin: 10, marginTop: 5, marginBottom: 0}} variant='body1'>You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
-                            <br/>
-                            <Typography style={{margin: 10, marginTop: 0}} color="textSecondary" variant='body2'>Your changes are automatically saved.</Typography>
+                        <Box
+                            flexGrow={1}
+                            p={1}>
+                            <Card elevation={3} > 
                         
-                        </Card>
-                    </Box>
-                    
-                    <Box
-                        component={Grid}
-                        container
-                        spacing={0}
-                        direction="column"
-                        style={{marginRight: 20}}
-                        >
-                        <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                            <Typography style={{margin: 10, marginBottom: 0}} variant='h6'>Try making it your own.</Typography>
+                                <Typography style={{margin: 10, marginTop: 5, marginBottom: 0}} variant='body1'>You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
+                                <br/>
+                                <Typography style={{margin: 10, marginTop: 0}} color="textSecondary" variant='body2'>Your changes are automatically saved.</Typography>
+                            
+                            </Card>
+                        </Box>
+                        
+                        <Box p={1} >
+                            <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                        </Box>
+
                     </Box>
                 </div>
 
@@ -1562,106 +1689,125 @@ class Canvas extends Component {
                     <br/>
                     <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
                     <br/>
-                    
+                    <div className='row1' ref={this.row1DivRef}>
                         <MenuProvider id='stress_context' >
                             <this.stressContext />
-                            <div className='section__mobile'  >
+                            <div className='col__short__mobile'  >
                                 {this.getTextCard(this.state.stress, 'stress')} 
                                 { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row2' ref={this.row2DivRef}>
                         <MenuProvider id='strengths_context' >
                             <this.strengthsContext />
-                            <div className='section__mobile' >
+                            <div className='col__short__mobile' >
                                 {this.getTextCard(this.state.strengths, 'strengths')} 
                                 { [...this.state.strengthsDragObj.values()].map((img, index) => [...this.state.strengthsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row3' ref={this.row3DivRef}>
                         <MenuProvider id='behaviors_context' >
                             <this.behaviorsContext />
-                            <div className='section__mobile' >
+                            <div className='col__short__mobile' >
                                 {this.getTextCard(this.state.behaviors, 'behaviors')} 
                                 { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row4' ref={this.row4DivRef}>
                         <MenuProvider id='energy_context' >
                             <this.energyContext />
-                            <div className='section__mobile' >
+                            <div className='col__short__mobile' >
                                 {this.getTextCard(this.state.energy, 'energy')}
                                 { [...this.state.energyDragObj.values()].map((img, index) => [...this.state.energyDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row5' ref={this.row5DivRef}>
                         <MenuProvider id='experience_bias_context' >
                             <this.expBiasContext />
-                            <div className='section__mobile' >
+                            <div className='col__long__mobile' >
                                 {this.getTextCard(this.state.experience_bias, 'experience_bias')}
                                 { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row6' ref={this.row6DivRef}>
                         <MenuProvider id='voice_context' >
                             <this.voiceContext />
-                            <div className='section__mobile' >
+                            <div className='col__long__mobile' >
                                 {this.getTextCard(this.state.voice, 'voice')}
                                 { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row7' ref={this.row7DivRef}>
                         <MenuProvider id='values_context' >
                             <this.valuesContext />
-                            <div className='section__mobile' >
+                            <div className='col__short__short__mobile' >
                                 {this.getTextCard(this.state.values, 'values')}
                                 { [...this.state.valuesDragObj.values()].map((img, index) => [...this.state.valuesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row8' ref={this.row8DivRef}>
                         <MenuProvider id='fixed_mindset_context' >
                             <this.fixedMindsetContext />
-                            <div className='section__mobile' >
+                            <div className='row__short__mobile' >
                                 {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
                                 { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row9' ref={this.row9DivRef}>
                         <MenuProvider id='growth_mindset_context' >
                             <this.growthMindsetContext />
-                            <div className='section__mobile' >
+                            <div className='row__short__mobile' >
                                 {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
                                 { [...this.state.growthMindsetDragObj.values()].map((img, index) => [...this.state.growthMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row10' ref={this.row10DivRef}>
                         <MenuProvider id='vision_context' >
                             <this.visionContext />
-                            <div className='section__mobile' >
+                            <div className='row__long__mobile' >
                                 {this.getTextCard(this.state.vision, 'vision')}        
                                 { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }                         
                             </div>
                         </MenuProvider>
-                        <br/><br/>
+                    </div>
+                    <br/><br/>
+                    <div className='row11' ref={this.row11DivRef}>
                         <MenuProvider id='purpose_context' >
                             <this.purposeContext />
-                            <div className='section__mobile' >
+                            <div className='col__short__mobile' >
                                 {this.getTextCard(this.state.purpose, 'purpose')}
                                 { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-                        <br/><br/>
-
+                    </div>
+                    <br/><br/>
+                    <div className='row12' ref={this.row12DivRef}>
                         <MenuProvider id='deliberate_practices_context' >
                             <this.delibPracticesContext />
-                            <div className='section__mobile' >
+                            <div className='col__short__mobile' >
                                 {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
                                 { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                             </div>
                         </MenuProvider>
-
-
-
+                    </div>
                     <br/>
                 </div>
             </div>
