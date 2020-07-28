@@ -1396,7 +1396,7 @@ class Canvas extends Component {
         if(isMobile) {
             return (this.getMobileLayout());
         }
-
+        console.log(this.state.canvasVisible);
         return (
             <div style={{visibility: this.state.canvasVisible}}>
                 <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.isDialogOpen}>

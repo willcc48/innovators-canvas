@@ -150,10 +150,10 @@ app.get('/userinfo', function(req, res, next) {
         User.findOne(myquery, function(err, user) {
             if(user==null) {
                 var my_user = new User({imgDrags: '[]', netid: req.session.netid, firstName: req.session.firstName, lastName: req.session.lastName,
-                    stress: '<h3>1. Stress</h3>', strengths: '<h3>2. Strengths</h3>', behaviors: '<h3>3. Behaviors</h3>', energy: '<h3>4. Energy</h3>',
-                    experience_bias: '<h3>5. Experience Bias</h3>', voice: '<h3>6. Voice</h3>', values: '<h3>7. Values</h3>', fixed_mindset: '<h3>8. Fixed Mindset</h3>',
-                    growth_mindset: '<h3>9. Growth Mindset</h3>', vision: '<h3>10. Vision</h3>', purpose: '<h3>11. Purpose</h3>',
-                    deliberate_practices: '<h3>12. Deliberate Practices</h3>'});
+                    stress: '<h3>Stress</h3>', strengths: '<h3>Strengths</h3>', behaviors: '<h3>Behaviors</h3>', energy: '<h3>Energy</h3>',
+                    experience_bias: '<h3>Experience Bias</h3>', voice: '<h3>Voice</h3>', values: '<h3>Values</h3>', fixed_mindset: '<h3>Fixed Mindset</h3>',
+                    growth_mindset: '<h3>Growth Mindset</h3>', vision: '<h3>Vision</h3>', purpose: '<h3>Purpose</h3>',
+                    deliberate_practices: '<h3>Deliberate Practices</h3>'});
     
                 my_user.save(function(err,result) {
                     User.findOne(myquery, function(err, user) {
