@@ -1384,7 +1384,7 @@ class Canvas extends Component {
                 >
                 <Card variant="outlined"   direction="column" alignItems="center" justify="center" style={{maxWidth: 200}}>
                     <CardContent>
-                        <Button component={ Link } to='/login' variant="outlined" color="primary">Login</Button>
+                        <Button component={ Link } to='/login' variant="outlined" color="primary">NetID Login</Button>
                         <Typography style={{marginTop: 15}} variant='body2'>Login to access your canvas.</Typography>
                     </CardContent>
                 </Card>

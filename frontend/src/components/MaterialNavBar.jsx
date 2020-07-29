@@ -140,7 +140,7 @@ export default function MaterialNavBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem component={ Link } to={props.loggedIn ? '/logout' : '/login'}>{props.loggedIn ? 'Logout' : 'Login'}</MenuItem>
+      <MenuItem component={ Link } to={props.loggedIn ? '/logout' : '/login'}>{props.loggedIn ? 'Logout' : 'NetID Login'}</MenuItem>
     </Menu>
   );
 
