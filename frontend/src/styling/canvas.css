@@ -65,6 +65,18 @@
     box-sizing: border-box;
 }
 
+.col__long__nohover {
+    width: 18vw;
+    height: 70vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+.col__long:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
 .col__short {
     width: 18vw;
     height: 35vh;
@@ -72,6 +84,19 @@
     border-style: solid;
     box-sizing: border-box;
 }
+.col__short__nohover {
+    width: 18vw;
+    height: 35vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.col__short:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
 
 .col__short__short {
     width: 18vw;
@@ -80,6 +105,19 @@
     border-style: solid;
     box-sizing: border-box;
 }
+.col__short__short__nohover {
+    width: 18vw;
+    height: 30vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.col__short__short:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}
+
 
 .row__short {
     width: 36vw;
@@ -88,6 +126,19 @@
     border-style: solid;
     box-sizing: border-box;
 }
+.row__short__nohover {
+    width: 36vw;
+    height: 30vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.row__short:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
 
 .row__long {
     width: 90vw;
@@ -95,6 +146,18 @@
     overflow: hidden;
     border-style: solid;
     box-sizing: border-box;
+}
+.row__long__nohover {
+    width: 90vw;
+    height: 30vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+.row__long:hover {
+    background-color: lightgray;
+    cursor: pointer;
 }
 
 

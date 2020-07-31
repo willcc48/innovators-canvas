@@ -149,7 +149,8 @@ app.get('/userinfo', function(req, res, next) {
         var myquery = {netid : req.session.netid};
         User.findOne(myquery, function(err, user) {
             if(user==null) {
-                var my_user = new User({imgDrags: '[]', netid: req.session.netid, firstName: req.session.firstName, lastName: req.session.lastName,
+                var my_user = new User({
+                    imgDrags: '[]', netid: req.session.netid, firstName: req.session.firstName, lastName: req.session.lastName,
                     stress: '<h3>Stress</h3>', strengths: '<h3>Strengths</h3>', behaviors: '<h3>Behaviors</h3>', energy: '<h3>Energy</h3>',
                     experience_bias: '<h3>Experience Bias</h3>', voice: '<h3>Voice</h3>', values: '<h3>Values</h3>', fixed_mindset: '<h3>Fixed Mindset</h3>',
                     growth_mindset: '<h3>Growth Mindset</h3>', vision: '<h3>Vision</h3>', purpose: '<h3>Purpose</h3>',
