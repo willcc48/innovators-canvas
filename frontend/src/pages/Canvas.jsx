@@ -21,6 +21,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Box from "@material-ui/core/Box";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import ImageIcon from '@material-ui/icons/Image';
+import GifIcon from '@material-ui/icons/Gif';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import $ from 'jquery'; 
 import { DialogContent, DialogTitle, DialogContentText } from '@material-ui/core';
@@ -84,6 +88,11 @@ class Canvas extends Component {
 
             wizardVisible: false,
             wizardDest: '',
+            editorFocused: false,
+            wizardPrompt1: '',
+            wizardAnswer1: '',
+            wizardImgs: [],
+            wizardImgUrlList: [],
 
             loaderVisibility: 'hidden',
             
@@ -139,8 +148,22 @@ class Canvas extends Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.pressedEnter = false;
 
+        this.stressEditor = null;
+        this.strengthsEditor = null;
+        this.behaviorsEditor = null;
+        this.energyEditor = null;
+        this.expBiasEditor = null;
+        this.voiceEditor = null;
+        this.valuesEditor = null;
+        this.fixedMindsetEditor = null;
+        this.growthMindsetEditor = null;
+        this.visionEditor = null;
+        this.purposeEditor = null;
+        this.delibPracticesEditor = null;
+
         if(!isMobile) {
             this.editorConfiguration = {
+                placeholder: 'Enter text here...',
                 toolbar: [
                     'undo',
                     'redo',
@@ -158,6 +181,7 @@ class Canvas extends Component {
             };
         } else {
             this.editorConfiguration = {
+                placeholder: 'Enter text here...',
                 toolbar: [
                     'bold',
                     'italic',
@@ -173,11 +197,37 @@ class Canvas extends Component {
         
 
         this.handleClickOpen = (id, gif) => {
+
             this.setState({
                 noResults: 'hidden',
                 isDialogOpen: true,
                 gifSearch: gif,
+                wizardSearch: false,
                 searchDest: id,
+                searchTerm: '',
+                searchImgList: []
+            });
+        };
+
+        this.handleWizardImage = () => {
+            this.setWizardSearchDest();
+            this.setState({
+                noResults: 'hidden',
+                isDialogOpen: true,
+                gifSearch: false,
+                wizardSearch: true,
+                searchTerm: '',
+                searchImgList: []
+            });
+        };
+
+        this.handleWizardGif = () => {
+            this.setWizardSearchDest();
+            this.setState({
+                noResults: 'hidden',
+                isDialogOpen: true,
+                gifSearch: true,
+                wizardSearch: true,
                 searchTerm: '',
                 searchImgList: []
             });
@@ -186,15 +236,22 @@ class Canvas extends Component {
         this.handleClose = () => {
             this.setState({isDialogOpen: false});
         };
+
         this.handleCloseWizardDialog = () => {
             this.setState({wizardVisible: false});
         };
         this.handleWizardDoneDialog = () => {
+            this.wizardUpdateTextandDrags();
             this.setState({wizardVisible: false});
         };
+        this.wizardChange1 = (data) => {
+            this.setState({wizardAnswer1: data});
+        };
+
         this.handleCloseClearDialog = () => {
             this.setState({isClearDialogOpen: false});
         };
+
         this.handleClearSection = () => {
             this.setState({isClearDialogOpen: false});
             var imgObj;
@@ -203,82 +260,96 @@ class Canvas extends Component {
                     this.isSectionModified[0] = false;
                     imgObj = this.state.stressDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({stressDragObj: imgObj, stress: '<h3>Stress</h3>', stressClass: 'col__short'});
+                    this.setState({stressDragObj: imgObj, stressClass: 'col__short'});
+                    this.stressEditor.setData('<h3>Stress</h3>');
                     break;
                 case 'strengths':
                     this.isSectionModified[1] = false;
                     imgObj = this.state.strengthsDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({strengthsDragObj: imgObj, strengths: '<h3>Strengths</h3>', strengthsClass: 'col__short'});
+                    this.setState({strengthsDragObj: imgObj, strengthsClass: 'col__short'});
+                    this.strengthsEditor.setData('<h3>Strengths</h3>');
                     break;
                 case 'behaviors':
                     this.isSectionModified[2] = false;
                     imgObj = this.state.behaviorsDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({behaviorsDragObj: imgObj, behaviors: '<h3>Behaviors</h3>', behaviorsClass: 'col__short'});
+                    this.setState({behaviorsDragObj: imgObj, behaviorsClass: 'col__short'});
+                    this.behaviorsEditor.setData('<h3>Behaviors</h3>');
                     break;
                 case 'energy':
                     this.isSectionModified[3] = false;
                     imgObj = this.state.energyDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({energyDragObj: imgObj, energy: '<h3>Energy</h3>', energyClass: 'col__short'});
+                    this.setState({energyDragObj: imgObj, energyClass: 'col__short'});
+                    this.energyEditor.setData('<h3>Energy</h3>');
                     break;
                 case 'experience_bias':
                     this.isSectionModified[4] = false;
                     imgObj = this.state.expBiasDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({expBiasDragObj: imgObj, experience_bias: '<h3>Experience Bias</h3>', expBiasClass: 'col__long'});
+                    this.setState({expBiasDragObj: imgObj, expBiasClass: 'col__long'});
+                    this.expBiasEditor.setData('<h3>Experience Bias</h3>');
                     break;
                 case 'voice':
                     this.isSectionModified[5] = false;
                     imgObj = this.state.voiceDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({voiceDragObj: imgObj, voice: '<h3>Voice</h3>', voiceClass: 'col__long'});
+                    this.setState({voiceDragObj: imgObj, voiceClass: 'col__long'});
+                    this.voiceEditor.setData('<h3>Voice</h3>');
                     break;
                 case 'values':
                     this.isSectionModified[6] = false;
                     imgObj = this.state.valuesDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({valuesDragObj: imgObj, values: '<h3>Values</h3>', valuesClass: 'col__short__short'});
+                    this.setState({valuesDragObj: imgObj, valuesClass: 'col__short__short'});
+                    this.valuesEditor.setData('<h3>Values</h3>');
                     break;
                 case 'fixed_mindset':
                     this.isSectionModified[7] = false;
                     imgObj = this.state.fixedMindsetDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({fixedMindsetDragObj: imgObj, fixed_mindset: '<h3>Fixed Mindset</h3>', fixedMindsetClass: 'row__short'});
+                    this.setState({fixedMindsetDragObj: imgObj, fixedMindsetClass: 'row__short'});
+                    this.fixedMindsetEditor.setData('<h3>Fixed Mindset</h3>');
                     break;
                 case 'growth_mindset':
                     this.isSectionModified[8] = false;
                     imgObj = this.state.growthMindsetDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({growthMindsetDragObj: imgObj, growth_mindset: '<h3>Growth Mindset</h3>', growthMindsetClass: 'row__short'});
+                    this.setState({growthMindsetDragObj: imgObj, growthMindsetClass: 'row__short'});
+                    this.growthMindsetEditor.setData('<h3>Growth Mindset</h3>');
                     break;
                 case 'vision':
                     this.isSectionModified[9] = false;
                     imgObj = this.state.visionDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({visionDragObj: imgObj, vision: '<h3>Vision</h3>', visionClass: 'row__long'})
+                    this.setState({visionDragObj: imgObj, visionClass: 'row__long'})
+                    this.visionEditor.setData('<h3>Vision</h3>');
                     break;
                 case 'purpose':
                     this.isSectionModified[10] = false;
                     imgObj = this.state.purposeDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({purposeDragObj: imgObj, purpose: '<h3>Purpose</h3>', purposeClass: 'col__short'});
+                    this.setState({purposeDragObj: imgObj, purposeClass: 'col__short'});
+                    this.purposeEditor.setData('<h3>Purpose</h3>');
                     break;
                 case 'deliberate_practices':
                     this.isSectionModified[11] = false;
                     imgObj = this.state.delibPracticesDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({delibPracticesDragObj: imgObj, deliberate_practices: '<h3>Deliberate Practices</h3>', delibPracticesClass: 'col__short'});
+                    this.setState({delibPracticesDragObj: imgObj, delibPracticesClass: 'col__short'});
+                    this.delibPracticesEditor.setData('<h3>Deliberate Practices</h3>');
                     break;
                 default:
             }
-
             this.setInfoTimer();
         };
 
         this.onImageClick = (id) => this.handleClickOpen(id, false);
         this.onGifClick = (id) => this.handleClickOpen(id, true);
+
+        this.wizardImageClick = () => this.handleWizardImage();
+        this.wizardGifClick = () => this.handleWizardGif();
 
         this.stressContext = () => (this.getContextMenuItems('stress'));
         this.strengthsContext = () => (this.getContextMenuItems('strengths'));
@@ -476,74 +547,74 @@ class Canvas extends Component {
             case 'stress':
                 flag = false;
                 for(value of this.state.stressDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Stress</h3>' && !flag) { this.isSectionModified[0] = false; this.setState({stress: value, stressClass: 'col__short'}); }
-                else { this.isSectionModified[0] = true; this.setState({stress: value, stressClass: 'col__short__nohover'}); }
+                if(value === '<h3>Stress</h3>' && !flag) { this.isSectionModified[0] = false; this.setState({stressClass: 'col__short'}); }
+                else { this.isSectionModified[0] = true; this.setState({stressClass: 'col__short__nohover'}); }
                 break;
             case 'strengths':
                 flag = false;
                 for(value of this.state.strengthsDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Strengths</h3>' && !flag) { this.isSectionModified[1] = false; this.setState({strengths: value, strengthsClass: 'col__short'}); }
-                else { this.isSectionModified[1] = true;this.setState({strengths: value, strengthsClass: 'col__short__nohover'}); }
+                if(value === '<h3>Strengths</h3>' && !flag) { this.isSectionModified[1] = false; this.setState({strengthsClass: 'col__short'}); }
+                else { this.isSectionModified[1] = true;this.setState({strengthsClass: 'col__short__nohover'}); }
                 break;
             case 'behaviors':
                 flag = false;
                 for(value of this.state.behaviorsDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Behaviors</h3>' && !flag) { this.isSectionModified[2] = false; this.setState({behaviors: value, behaviorsClass: 'col__short'}); }
-                else { this.isSectionModified[2] = true;this.setState({behaviors: value, behaviorsClass: 'col__short__nohover'}); }
+                if(value === '<h3>Behaviors</h3>' && !flag) { this.isSectionModified[2] = false; this.setState({behaviorsClass: 'col__short'}); }
+                else { this.isSectionModified[2] = true;this.setState({behaviorsClass: 'col__short__nohover'}); }
                 break;
             case 'energy':
                 flag = false;
                 for(value of this.state.energyDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Energy</h3>' && !flag) { this.isSectionModified[3] = false; this.setState({energy: value, energyClass: 'col__short'}); }
-                else { this.isSectionModified[3] = true;this.setState({energy: value, energyClass: 'col__short__nohover'}); }
+                if(value === '<h3>Energy</h3>' && !flag) { this.isSectionModified[3] = false; this.setState({energyClass: 'col__short'}); }
+                else { this.isSectionModified[3] = true;this.setState({energyClass: 'col__short__nohover'}); }
                 break;
             case 'experience_bias':
                 flag = false;
                 for(value of this.state.expBiasDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Experience Bias</h3>' && !flag) { this.isSectionModified[4] = false; this.setState({experience_bias: value, expBiasClass: 'col__long'}); }
-                else { this.isSectionModified[4] = true;this.setState({experience_bias: value, expBiasClass: 'col__long__nohover'}); }
+                if(value === '<h3>Experience Bias</h3>' && !flag) { this.isSectionModified[4] = false; this.setState({expBiasClass: 'col__long'}); }
+                else { this.isSectionModified[4] = true;this.setState({expBiasClass: 'col__long__nohover'}); }
                 break;
             case 'voice':
                 flag = false;
                 for(value of this.state.voiceDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Voice</h3>' && !flag) { this.isSectionModified[5] = false; this.setState({voice: value, voiceClass: 'col__long'}); }
-                else { this.isSectionModified[5] = true;this.setState({voice: value, voiceClass: 'col__long__nohover'}); }
+                if(value === '<h3>Voice</h3>' && !flag) { this.isSectionModified[5] = false; this.setState({voiceClass: 'col__long'}); }
+                else { this.isSectionModified[5] = true;this.setState({voiceClass: 'col__long__nohover'}); }
                 break;
             case 'values':
                 flag = false;
                 for(value of this.state.valuesDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Values</h3>' && !flag) { this.isSectionModified[6] = false; this.setState({values: value, valuesClass: 'col__short__short'}); }
-                else { this.isSectionModified[6] = true;this.setState({values: value, valuesClass: 'col__short__short__nohover'}); }
+                if(value === '<h3>Values</h3>' && !flag) { this.isSectionModified[6] = false; this.setState({valuesClass: 'col__short__short'}); }
+                else { this.isSectionModified[6] = true;this.setState({valuesClass: 'col__short__short__nohover'}); }
                 break;
             case 'fixed_mindset':
                 flag = false;
                 for(value of this.state.fixedMindsetDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Fixed Mindset</h3>' && !flag) { this.isSectionModified[7] = false; this.setState({fixed_mindset: value, fixedMindsetClass: 'row__short'}); }
-                else { this.isSectionModified[7] = true;this.setState({fixed_mindset: value, fixedMindsetClass: 'row__short__nohover'}); }
+                if(value === '<h3>Fixed Mindset</h3>' && !flag) { this.isSectionModified[7] = false; this.setState({fixedMindsetClass: 'row__short'}); }
+                else { this.isSectionModified[7] = true;this.setState({fixedMindsetClass: 'row__short__nohover'}); }
                 break;
             case 'growth_mindset':
                 flag = false;
                 for(value of this.state.growthMindsetDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Growth Mindset</h3>' && !flag) { this.isSectionModified[8] = false; this.setState({growth_mindset: value, growthMindsetClass: 'row__short'}); }
-                else { this.isSectionModified[8] = true;this.setState({growth_mindset: value, growthMindsetClass: 'row__short__nohover'}); }
+                if(value === '<h3>Growth Mindset</h3>' && !flag) { this.isSectionModified[8] = false; this.setState({growthMindsetClass: 'row__short'}); }
+                else { this.isSectionModified[8] = true;this.setState({growthMindsetClass: 'row__short__nohover'}); }
                 break;
             case 'vision':
                 flag = false;
                 for(value of this.state.visionDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Vision</h3>' && !flag) { this.isSectionModified[9] = false; this.setState({vision: value, visionClass: 'row__long'}); }
-                else { this.isSectionModified[9] = true;this.setState({vision: value, visionClass: 'row__long__nohover'}); }
+                if(value === '<h3>Vision</h3>' && !flag) { this.isSectionModified[9] = false; this.setState({visionClass: 'row__long'}); }
+                else { this.isSectionModified[9] = true;this.setState({visionClass: 'row__long__nohover'}); }
                 break;
             case 'purpose':
                 flag = false;
                 for(value of this.state.purposeDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Purpose</h3>' && !flag) { this.isSectionModified[10] = false; this.setState({purpose: value, purposeClass: 'col__short'}); }
-                else { this.isSectionModified[10] = true;this.setState({purpose: value, purposeClass: 'col__short__nohover'}); }
+                if(value === '<h3>Purpose</h3>' && !flag) { this.isSectionModified[10] = false; this.setState({purposeClass: 'col__short'}); }
+                else { this.isSectionModified[10] = true;this.setState({purposeClass: 'col__short__nohover'}); }
                 break;
             case 'deliberate_practices':
                 flag = false;
                 for(value of this.state.delibPracticesDragObj.values()) { if(value.visible) { flag = true; } }
-                if(value === '<h3>Deliberate Practices</h3>' && !flag) { this.isSectionModified[11] = false; this.setState({deliberate_practices: value, delibPracticesClass: 'col__short'}); }
-                else { this.isSectionModified[11] = true;this.setState({deliberate_practices: value, delibPracticesClass: 'col__short__nohover'}); }
+                if(value === '<h3>Deliberate Practices</h3>' && !flag) { this.isSectionModified[11] = false; this.setState({delibPracticesClass: 'col__short'}); }
+                else { this.isSectionModified[11] = true;this.setState({delibPracticesClass: 'col__short__nohover'}); }
                 break;
             default:            
         }
@@ -558,14 +629,55 @@ class Canvas extends Component {
                 config={ this.editorConfiguration }
                 data={ text }
                 onInit={ editor => {
+                    switch(id) {
+                        case 'stress':
+                            this.stressEditor = editor;
+                            break;
+                        case 'strengths':
+                            this.strengthsEditor = editor;
+                            break;
+                        case 'behaviors':
+                            this.behaviorsEditor = editor;
+                            break;
+                        case 'energy':
+                            this.energyEditor = editor;
+                            break;
+                        case 'experience_bias':
+                            this.expBiasEditor = editor;
+                            break;
+                        case 'voice':
+                            this.voiceEditor = editor;
+                            break;
+                        case 'values':
+                            this.valuesEditor = editor;
+                            break;
+                        case 'fixed_mindset':
+                            this.fixedMindsetEditor = editor;
+                            break;
+                        case 'growth_mindset':
+                            this.growthMindsetEditor = editor;
+                            break;
+                        case 'vision':
+                            this.visionEditor = editor;
+                            break;
+                        case 'purpose':
+                            this.purposeEditor = editor;
+                            break;
+                        case 'deliberate_practices':
+                            this.delibPracticesEditor = editor;
+                            break;
+                        default:            
+                    }
                 } }
                 onChange={ ( event, editor ) => {
                     const data = editor.getData();
                     this.handleTextChange(data, id);
                 } }
                 onBlur={ ( event, editor ) => {
+                    this.setState({editorFocused: false})
                 } }
                 onFocus={ ( event, editor ) => {
+                    this.setState({editorFocused: true})
                 } }
                 
             />
@@ -599,11 +711,11 @@ class Canvas extends Component {
         this.setloaderVisibility('visible');
 
         var dbDrags = JSON.stringify(this.getDragsForDB());
-        var userData = {imgDrags: dbDrags, stress: this.state.stress, strengths: this.state.strengths, behaviors: this.state.behaviors, energy: this.state.energy,
-                        experience_bias: this.state.experience_bias, voice: this.state.voice, values: this.state.values, fixed_mindset: this.state.fixed_mindset,
-                        growth_mindset: this.state.growth_mindset, vision: this.state.vision, purpose: this.state.purpose,
-                        deliberate_practices: this.state.deliberate_practices};
-        
+        var userData = {imgDrags: dbDrags, stress: this.stressEditor.getData(), strengths: this.strengthsEditor.getData(), behaviors: this.behaviorsEditor.getData(), energy: this.energyEditor.getData(),
+                        experience_bias: this.expBiasEditor.getData(), voice: this.voiceEditor.getData(), values: this.valuesEditor.getData(), fixed_mindset: this.fixedMindsetEditor.getData(),
+                        growth_mindset: this.growthMindsetEditor.getData(), vision: this.visionEditor.getData(), purpose: this.purposeEditor.getData(),
+                        deliberate_practices: this.delibPracticesEditor.getData()};
+    
         var xhr = new window.XMLHttpRequest();
         xhr.open('POST', 'http://localhost:9000/canvas_data', true);
         xhr.withCredentials = true;
@@ -817,6 +929,156 @@ class Canvas extends Component {
         }
     }
 
+    wizardUpdateTextandDrags() {
+        var ogText, newText;
+        switch(this.state.wizardDest) {
+            case 'Stress':
+                ogText = this.stressEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.stressEditor.setData(newText);
+                break;
+            case 'Strengths':
+                ogText = this.strengthsEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.strengthsEditor.setData(newText);
+                break;
+            case 'Behaviors':
+                ogText = this.behaviorsEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.behaviorsEditor.setData(newText);
+                break;
+            case 'Energy':
+                ogText = this.energyEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.energyEditor.setData(newText);
+                break;
+            case 'Experience Bias':
+                ogText = this.expBiasEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.expBiasEditor.setData(newText);
+                break;
+            case 'Voice':
+                ogText = this.voiceEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.voiceEditor.setData(newText);
+                break;
+            case 'Values':
+                ogText = this.valuesEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.valuesEditor.setData(newText);
+                break;
+            case 'Fixed Mindset':
+                ogText = this.fixedMindsetEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.fixedMindsetEditor.setData(newText);
+                break;
+            case 'Growth Mindset':
+                ogText = this.growthMindsetEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.growthMindsetEditor.setData(newText);
+                break;
+            case 'Vision':
+                ogText = this.visionEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.visionEditor.setData(newText);
+                break;
+            case 'Purpose':
+                ogText = this.purposeEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.purposeEditor.setData(newText);
+                break;
+            case 'Deliberate Practices':
+                ogText = this.delibPracticesEditor.getData();
+                newText = ogText + this.state.wizardAnswer1;
+                this.delibPracticesEditor.setData(newText);
+                break;
+            default:
+        }
+
+        for(var i=0; i<this.state.wizardImgUrlList.length; i++) {
+            var map;
+            var imgObj = this.getImgDragComp(-1, this.state.searchDest, this.dragIndex, this.state.wizardImgUrlList[i]);
+            switch(this.state.wizardDest) {
+                case 'Stress':
+                    this.isSectionModified[0] = true;
+                    map = this.state.stressDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({stressDragObj: map, stressClass: 'col__short__nohover'});
+                    break;
+                case 'Strengths':
+                    this.isSectionModified[1] = true;
+                    map = this.state.strengthsDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover'});
+                    break;
+                case 'Behaviors':
+                    this.isSectionModified[2] = true;
+                    map = this.state.behaviorsDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover'});
+                    break;
+                case 'Energy':
+                    this.isSectionModified[3] = true;
+                    map = this.state.energyDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({energyDragObj: map, energyClass: 'col__short__nohover'});
+                    break;
+                case 'Experience Bias':
+                    this.isSectionModified[4] = true;
+                    map = this.state.expBiasDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover'});
+                    break;
+                case 'Voice':
+                    this.isSectionModified[5] = true;
+                    map = this.state.voiceDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover'});
+                    break;
+                case 'Values':
+                    this.isSectionModified[6] = true;
+                    map = this.state.valuesDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover'});
+                    break;
+                case 'Fixed Mindset':
+                    this.isSectionModified[7] = true;
+                    map = this.state.fixedMindsetDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover'});
+                    break;
+                case 'Growth Mindset':
+                    this.isSectionModified[8] = true;
+                    map = this.state.growthMindsetDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover'});
+                    break;
+                case 'Vision':
+                    this.isSectionModified[9] = true;
+                    map = this.state.visionDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({visionDragObj: map, visionClass: 'row__long__nohover'});
+                    break;
+                case 'Purpose':
+                    this.isSectionModified[10] = true;
+                    map = this.state.purposeDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover'});
+                    break;
+                case 'Deliberate Practices':
+                    this.isSectionModified[11] = true;
+                    map = this.state.delibPracticesDragObj;
+                    map.set(this.dragIndex, imgObj);
+                    this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover'});
+                    break;
+                default:            
+            }
+            this.dragIndex++;
+        }
+
+        this.setInfoTimer();
+    }
+
     reconstructDbDrags(imgDrags) {
         for(var i=0; i<imgDrags.length; i++) {
             var img = imgDrags[i];
@@ -949,8 +1211,8 @@ class Canvas extends Component {
                     break;
                 default:            
             }
-            console.log(this.isSectionModified);
             this.dragIndex++;
+            this.setInfoTimer();
         }
     }
 
@@ -1304,30 +1566,48 @@ class Canvas extends Component {
     }
 
     addImgDrag(searchButton) {
-        var imgObj, searchDest = this.state.searchDest;
+
+        var imgSearchIndex, searchDest = this.state.searchDest;
         switch(searchButton.id) {
             case 'img1':
-                imgObj = this.getImgDragComp(0, searchDest, this.dragIndex);
+                imgSearchIndex = 0;
                 break;
             case 'img2':
-                imgObj = this.getImgDragComp(1, searchDest, this.dragIndex);
+                imgSearchIndex = 1;
                 break;
             case 'img3':
-                imgObj = this.getImgDragComp(2, searchDest, this.dragIndex);
+                imgSearchIndex = 2;
                 break;
             case 'img4':
-                imgObj = this.getImgDragComp(3, searchDest, this.dragIndex);
+                imgSearchIndex = 3;
                 break;
             case 'img5':
-                imgObj = this.getImgDragComp(4, searchDest, this.dragIndex);
+                imgSearchIndex = 4;
                 break;
             case 'img6':
-                imgObj = this.getImgDragComp(5, searchDest, this.dragIndex);
+                imgSearchIndex = 5;
                 break;
             default:
                 break;
         }
-        
+
+        if(this.state.wizardSearch) {
+            var arr1 = this.state.wizardImgUrlList;
+            arr1.push(this.state.searchImgList[imgSearchIndex]);
+            this.setState({wizardImgUrlList: arr1});
+
+            var arr2 = this.state.wizardImgs;
+            arr2.push(
+                <Grid item xs={4} >
+                    <div className="image"><button style={{cursor: 'default', backgroundImage: 'url('+this.state.searchImgList[imgSearchIndex]+')'}} className="img__button__search" /></div>
+                </Grid>
+            );
+            this.setState({wizardImgs: arr2});
+            return;
+        }
+
+        var imgObj = this.getImgDragComp(imgSearchIndex, searchDest, this.dragIndex);
+
         var map;
         switch(searchDest) {
             case 'stress':
@@ -1583,78 +1863,134 @@ class Canvas extends Component {
         }
     }
 
+    setWizardSearchDest() {
+        switch(this.state.wizardDest) {
+            case 'Stress':
+                this.setState({searchDest: 'stress'});
+                break;
+            case 'Strengths':
+                this.setState({searchDest: 'strengths'});
+                break;
+            case 'Behaviors':
+                this.setState({searchDest: 'behaviors'});
+                break;
+            case 'Energy':
+                this.setState({searchDest: 'energy'});
+                break;
+            case 'Experience Bias':
+                this.setState({searchDest: 'experience_bias'});
+                break;
+            case 'Voice':
+                this.setState({searchDest: 'voice'});
+                break;
+            case 'Values':
+                this.setState({searchDest: 'values'});
+                break;
+            case 'Fixed Mindset':
+                this.setState({searchDest: 'fixed_mindset'});
+                break;
+            case 'Growth Mindset':
+                this.setState({searchDest: 'growth_mindset'});
+                break;
+            case 'Vision':
+                this.setState({searchDest: 'vision'});
+                break;
+            case 'Purpose':
+                this.setState({searchDest: 'purpose'});
+                break;
+            case 'Deliberate Practices':
+                this.setState({searchDest: 'deliberate_practices'});
+                break;
+            default:            
+        }
+    }
+
     showWizard(id) {
+        if(this.state.editorFocused) { return; }
+        this.setState({wizardAnswer1: '', wizardImgs: []})
         switch(id) {
             case 'stress':
                 if(!this.isSectionModified[0]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Stress'});
+                    this.setState({wizardPrompt1: "How do you envision giving back to the community?"});
                 }
                 break;
             case 'strengths':
                 if(!this.isSectionModified[1]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Strengths'});
+                    this.setState({wizardPrompt1: "What are you good at?"});
                 }
                 break;
             case 'behaviors':
                 if(!this.isSectionModified[2]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Behaviors'});
+                    this.setState({wizardPrompt1: "What are some behaviors that define you?"});
                 }
                 break;
             case 'energy':
                 if(!this.isSectionModified[3]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Energy'});
+                    this.setState({wizardPrompt1: "What does your energy flow look like?"});
                 }
                 break;
             case 'experience_bias':
                 if(!this.isSectionModified[4]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Experience Bias'});
+                    this.setState({wizardPrompt1: "How is your experience limited by your perspective?"});
                 }
                 break;
             case 'voice':
                 if(!this.isSectionModified[5]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Voice'});
+                    this.setState({wizardPrompt1: "What issues do you intend to address?"});
                 }
                 break;
             case 'values':
                 if(!this.isSectionModified[6]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Values'});
+                    this.setState({wizardPrompt1: "What rules or principles do you live by?"});
                 }
                 break;
             case 'fixed_mindset':
                 if(!this.isSectionModified[7]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Fixed Mindset'});
+                    this.setState({wizardPrompt1: "In what ways do you have a fixed mindset?"});
                 }
                 break;
             case 'growth_mindset':
                 if(!this.isSectionModified[8]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Growth Mindset'});
+                    this.setState({wizardPrompt1: "In what ways do you practice a mindset of growth?"});
                 }
                 break;
             case 'vision':
                 if(!this.isSectionModified[9]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Vision'});
+                    this.setState({wizardPrompt1: "How do you envision giving back to the community?"});
                 }
                 break;
             case 'purpose':
                 if(!this.isSectionModified[10]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Purpose'});
+                    this.setState({wizardPrompt1: "What do you live for?"});
                 }
                 break;
             case 'deliberate_practices':
                 if(!this.isSectionModified[11]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Deliberate Practices'});
+                    this.setState({wizardPrompt1: "What are some intentional things you do?"});
                 }
                 break;
             default:            
@@ -1662,7 +1998,6 @@ class Canvas extends Component {
     }
 
     render () {
-        console.log(this.isSectionModified);
         if(!this.state.loggedIn && this.state.loggedIn !== null) {
             return (
                 <div>
@@ -1731,29 +2066,65 @@ class Canvas extends Component {
                 >
                     <DialogTitle>Clear Canvas Section</DialogTitle>
                     <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to clear this section? This cannot be reversed.
-                    </DialogContentText>
+                        <DialogContentText>
+                            Are you sure you want to clear this section? This cannot be reversed.
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={this.handleCloseClearDialog} color="primary">
-                        No
-                    </Button>
-                    <Button onClick={this.handleClearSection} color="primary" >
-                        Yes
-                    </Button>
+                        <Button onClick={this.handleCloseClearDialog} color="primary">
+                            No
+                        </Button>
+                        <Button onClick={this.handleClearSection} color="primary" >
+                            Yes
+                        </Button>
                     </DialogActions>
                 </Dialog>
 
                 <Dialog
+                    disableEnforceFocus={false}
                     open={this.state.wizardVisible}
                     onClose={this.handleCloseWizardDialog}
                 >
                     <DialogTitle>{this.state.wizardDest} Wizard</DialogTitle>
                     <DialogContent>
                     <DialogContentText>
-                        Here are a few prompts regarding {this.state.wizardDest}. Feel free to add images and gifs!
+                        Here are a couple prompts regarding {this.state.wizardDest}. Feel free to add images and gifs!
                     </DialogContentText>
+                    <br/>
+                    <DialogContentText variant="h6">
+                        {this.state.wizardPrompt1}
+                    </DialogContentText>
+                    <Grid container spacing={0}>
+                        <Grid item xs={10}>
+                            <CKEditor
+                                editor={ BalloonEditor }
+                                config={ this.editorConfiguration }
+                                data={ '' }
+                                onChange={ ( event, editor ) => {
+                                    const data = editor.getData();
+                                    this.wizardChange1(data);
+                                } }
+                            />
+                            <br/>
+                            <Grid container spacing={1}>
+                                { this.state.wizardImgs.map((img, index) => <Fragment key={index}>{img}</Fragment>) }
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Tooltip title='Add Image'>
+                                <IconButton color="inherit" onClick={this.handleWizardImage}>
+                                    <ImageIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Tooltip title='Add Gif'>
+                                <IconButton color="inherit" onClick={this.handleWizardGif}>
+                                    <GifIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                    </Grid>
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={this.handleCloseWizardDialog} color="primary">
