@@ -89,6 +89,7 @@ class Canvas extends Component {
             wizardVisible: false,
             wizardDest: '',
             editorFocused: false,
+            wizardImgIndex: 0,
             wizardPrompts: ['','','','',''],
             wizardAnswers: ['','','','',''],
             wizardVisibilities: ['hidden', 'hidden', 'hidden', 'hidden', 'hidden'],
@@ -96,6 +97,7 @@ class Canvas extends Component {
             wizardVisibility5: 'hidden',
             wizardImgs: [],
             wizardImgUrlList: [],
+            wizardMeanings: [],
 
             loaderVisibility: 'hidden',
             
@@ -134,7 +136,7 @@ class Canvas extends Component {
         this.row10DivRef = React.createRef();
         this.row11DivRef = React.createRef();
         this.row12DivRef = React.createRef();
-        
+
         this.dragIndex = 0;
         this.focusedId = -1;
         this.setImgBlur = this.setImgBlur.bind(this);
@@ -869,8 +871,8 @@ class Canvas extends Component {
         var ret = [];
         for(var i=0; i<dragArray.length; i++) {
             if(dragArray[i].visible) {
-                ret.push({section: id, imgSrc: dragArray[i].imgSrc, xDensity: dragArray[i].xDensity, yDensity: dragArray[i].yDensity,
-                    width: dragArray[i].width, height: dragArray[i].height, meaningText: dragArray[i].meaningText, mobile: isMobile, sectionWidth: secWidth, sectionHeight: secHeight, browserWidth: window.innerWidth, browserHeight: window.innerHeight});
+                ret.push({section: id, imgSrc: dragArray[i].imgSrc, meaningText: dragArray[i].meaningText, xDensity: dragArray[i].xDensity, yDensity: dragArray[i].yDensity,
+                    width: dragArray[i].width, height: dragArray[i].height, mobile: isMobile});
             }
         }
         return ret;
@@ -1022,7 +1024,8 @@ class Canvas extends Component {
 
         for(var i=0; i<this.state.wizardImgUrlList.length; i++) {
             var map;
-            var imgObj = this.getImgDragComp(-1, this.state.searchDest, this.dragIndex, this.state.wizardImgUrlList[i]);
+            console.log(this.state.wizardMeanings);
+            var imgObj = this.getImgDragComp(-1, this.state.searchDest, this.dragIndex, this.state.wizardImgUrlList[i], this.state.wizardMeanings[i]);
             switch(this.state.wizardDest) {
                 case 'Stress':
                     this.isSectionModified[0] = true;
@@ -1114,11 +1117,6 @@ class Canvas extends Component {
                 height = parseInt(height.split('v')[0]);
                 switch(img.section) {
                     case 'stress':
-                        console.log(xDens, yDens, width, height);
-                        
-                        xDens /= 3;
-                        width = ((width * (img.browserWidth/100)) / img.sectionWidth) * this.col1DivRef.current.offsetWidth * 2;//* window.innerWidth / img.browserWidth;
-                        height = ((height * (img.browserHeight/100)) / img.sectionHeight) * this.col1DivRef.current.offsetHeight/2;// * window.innerHeight / img.browserHeight;
                         break;
                     case 'strengths':
                         
@@ -1155,12 +1153,11 @@ class Canvas extends Component {
                         break;
                     default:
                 }
-                console.log(width, height);
             }
             else if(!img.mobile && isMobile) {
 
             }
-            var imgObj = this.getImgDragComp(-1, img.section, this.dragIndex, img.imgSrc, xDens, yDens, width, height, img.meaningText);
+            var imgObj = this.getImgDragComp(-1, img.section, this.dragIndex, img.imgSrc, img.meaningText, xDens, yDens, width, height);
             switch(img.section) {
                 case 'stress':
                     this.isSectionModified[0] = true;
@@ -1241,7 +1238,7 @@ class Canvas extends Component {
         }
     }
 
-    getImgDragComp(i, searchDest, index, reconstructedSrc = 0, defXDensity = 10/window.innerWidth, defYDensity = 10/window.innerHeight, defWidth = '8vw', defHeight = '11vh', defMeaningText = '') {
+    getImgDragComp(i, searchDest, index, reconstructedSrc = 0, defMeaningText = '', defXDensity = 10/window.innerWidth, defYDensity = 10/window.innerHeight, defWidth = '8vw', defHeight = '11vh') {
         var src;
         if(!reconstructedSrc && this.state.searchImgList[i] !== 'null') {
             src = this.state.searchImgList[i];
@@ -1251,7 +1248,7 @@ class Canvas extends Component {
             }
         } else { src = reconstructedSrc; }
         
-        var imgObj = { visible: true, imgSrc: src, dragComp: null, xDensity: defXDensity, yDensity: defYDensity, width: defWidth, height: defHeight, meaningText: defMeaningText, rndRef: null};
+        var imgObj = { visible: true, imgSrc: src, dragComp: null, meaningText: defMeaningText, xDensity: defXDensity, yDensity: defYDensity, width: defWidth, height: defHeight, rndRef: null};
 
         imgObj.dragComp = (
             <Rnd
@@ -1621,13 +1618,20 @@ class Canvas extends Component {
             arr1.push(this.state.searchImgList[imgSearchIndex]);
             this.setState({wizardImgUrlList: arr1});
 
+            var index = this.state.wizardImgIndex;
+
             var arr2 = this.state.wizardImgs;
             arr2.push(
                 <Grid item xs={4} >
-                    <div className="image"><button style={{cursor: 'default', backgroundImage: 'url('+this.state.searchImgList[imgSearchIndex]+')'}} className="img__button__search" /></div>
+                    <div style={{display: 'flex', flexDirection: 'column'}} className="image">
+                        <button style={{padding: '10px', flex: 1, cursor: 'default', backgroundImage: 'url('+this.state.searchImgList[imgSearchIndex]+')'}} className="img__button__search" />
+                        <TextareaAutosize placeholder='meaning...' style={{resize: "none"}} rows={1} onChange={(e) => this.handleWizardMeaningText(index, e)} />
+                    </div>
                 </Grid>
             );
-            this.setState({wizardImgs: arr2});
+            console.log(this.state.wizardMeanings);
+
+            this.setState({wizardImgs: arr2, wizardImgIndex: this.state.wizardImgIndex+1});
             return;
         }
 
@@ -1712,6 +1716,13 @@ class Canvas extends Component {
 
         this.dragIndex++;
         this.setInfoTimer();
+    }
+
+    handleWizardMeaningText(index, e) {
+        console.log(index);
+        var arr = this.state.wizardMeanings;
+        arr[index] = e.target.value;
+        this.setState({wizardMeanings: arr});
     }
 
     setImgFocus(buttonId) {
@@ -2032,7 +2043,7 @@ class Canvas extends Component {
             }
         }
 
-        this.setState({wizardPrompts: prompts, wizardVisibilities: visibilities, wizardVisibilitiesBoolean: visibilitiesBoolean});
+        this.setState({wizardPrompts: prompts, wizardVisibilities: visibilities, wizardVisibilitiesBoolean: visibilitiesBoolean, wizardImgIndex: 0, wizardMeanings: []});
     }
 
     render () {
@@ -2257,14 +2268,11 @@ class Canvas extends Component {
                         alignItems="center"
                         justify="center"
                         >
-                        <Card elevation={3} > 
-                       
-                        <Typography style={{margin: 35, marginBottom: 0}} variant='h5'>Try making it your own.</Typography>
-                            <Typography style={{margin: 35, marginTop: 15, marginBottom: 0}} variant='body1'>You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
-                            <br/>
-                            <Typography style={{margin: 35, marginTop: 0}} color="textSecondary" variant='body2'>Your changes are automatically saved.</Typography>
+
+                        <Typography style={{margin: 35, marginBottom: 0}} variant='body1'>Try making it your own. You can add resizable pictures and gifs, and you can edit each text to map out your story.</Typography>
                         
-                        </Card>
+                        <Typography style={{margin: 35, marginTop: 0}} color="textSecondary" variant='body2'>Your changes are automatically saved.</Typography>
+
                     </Box>
                     
                     <Box
@@ -2274,7 +2282,9 @@ class Canvas extends Component {
                         direction="column"
                         style={{marginRight: 40}}
                         >
-                        <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                        <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                            <OutlinedCard firstName={this.state.firstName} lastName={this.state.lastName} netid={this.state.netid}/>
+                        </Grid>
                     </Box>
                 </div>
 
