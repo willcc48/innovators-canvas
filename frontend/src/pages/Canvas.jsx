@@ -89,8 +89,11 @@ class Canvas extends Component {
             wizardVisible: false,
             wizardDest: '',
             editorFocused: false,
-            wizardPrompt1: '',
-            wizardAnswer1: '',
+            wizardPrompts: ['','','','',''],
+            wizardAnswers: ['','','','',''],
+            wizardVisibilities: ['hidden', 'hidden', 'hidden', 'hidden', 'hidden'],
+            wizardVisibilitiesBoolean: [false, false, false, false, false],
+            wizardVisibility5: 'hidden',
             wizardImgs: [],
             wizardImgUrlList: [],
 
@@ -245,7 +248,29 @@ class Canvas extends Component {
             this.setState({wizardVisible: false});
         };
         this.wizardChange1 = (data) => {
-            this.setState({wizardAnswer1: data});
+            var answers = this.state.wizardAnswers;
+            answers[0] = data;
+            this.setState({wizardAnswers: answers});
+        };
+        this.wizardChange2 = (data) => {
+            var answers = this.state.wizardAnswers;
+            answers[1] = data;
+            this.setState({wizardAnswers: answers});
+        };
+        this.wizardChange3 = (data) => {
+            var answers = this.state.wizardAnswers;
+            answers[2] = data;
+            this.setState({wizardAnswers: answers});
+        };
+        this.wizardChange4 = (data) => {
+            var answers = this.state.wizardAnswers;
+            answers[3] = data;
+            this.setState({wizardAnswers: answers});
+        };
+        this.wizardChange5 = (data) => {
+            var answers = this.state.wizardAnswers;
+            answers[4] = data;
+            this.setState({wizardAnswers: answers});
         };
 
         this.handleCloseClearDialog = () => {
@@ -542,77 +567,77 @@ class Canvas extends Component {
     }
  
     handleTextChange(value, id) {
-        var flag;
+        var flag, val;
         switch(id) {
             case 'stress':
                 flag = false;
-                for(value of this.state.stressDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.stressDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Stress</h3>' && !flag) { this.isSectionModified[0] = false; this.setState({stressClass: 'col__short'}); }
                 else { this.isSectionModified[0] = true; this.setState({stressClass: 'col__short__nohover'}); }
                 break;
             case 'strengths':
                 flag = false;
-                for(value of this.state.strengthsDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.strengthsDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Strengths</h3>' && !flag) { this.isSectionModified[1] = false; this.setState({strengthsClass: 'col__short'}); }
                 else { this.isSectionModified[1] = true;this.setState({strengthsClass: 'col__short__nohover'}); }
                 break;
             case 'behaviors':
                 flag = false;
-                for(value of this.state.behaviorsDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.behaviorsDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Behaviors</h3>' && !flag) { this.isSectionModified[2] = false; this.setState({behaviorsClass: 'col__short'}); }
                 else { this.isSectionModified[2] = true;this.setState({behaviorsClass: 'col__short__nohover'}); }
                 break;
             case 'energy':
                 flag = false;
-                for(value of this.state.energyDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.energyDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Energy</h3>' && !flag) { this.isSectionModified[3] = false; this.setState({energyClass: 'col__short'}); }
                 else { this.isSectionModified[3] = true;this.setState({energyClass: 'col__short__nohover'}); }
                 break;
             case 'experience_bias':
                 flag = false;
-                for(value of this.state.expBiasDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.expBiasDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Experience Bias</h3>' && !flag) { this.isSectionModified[4] = false; this.setState({expBiasClass: 'col__long'}); }
                 else { this.isSectionModified[4] = true;this.setState({expBiasClass: 'col__long__nohover'}); }
                 break;
             case 'voice':
                 flag = false;
-                for(value of this.state.voiceDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.voiceDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Voice</h3>' && !flag) { this.isSectionModified[5] = false; this.setState({voiceClass: 'col__long'}); }
                 else { this.isSectionModified[5] = true;this.setState({voiceClass: 'col__long__nohover'}); }
                 break;
             case 'values':
                 flag = false;
-                for(value of this.state.valuesDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.valuesDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Values</h3>' && !flag) { this.isSectionModified[6] = false; this.setState({valuesClass: 'col__short__short'}); }
                 else { this.isSectionModified[6] = true;this.setState({valuesClass: 'col__short__short__nohover'}); }
                 break;
             case 'fixed_mindset':
                 flag = false;
-                for(value of this.state.fixedMindsetDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.fixedMindsetDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Fixed Mindset</h3>' && !flag) { this.isSectionModified[7] = false; this.setState({fixedMindsetClass: 'row__short'}); }
                 else { this.isSectionModified[7] = true;this.setState({fixedMindsetClass: 'row__short__nohover'}); }
                 break;
             case 'growth_mindset':
                 flag = false;
-                for(value of this.state.growthMindsetDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.growthMindsetDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Growth Mindset</h3>' && !flag) { this.isSectionModified[8] = false; this.setState({growthMindsetClass: 'row__short'}); }
                 else { this.isSectionModified[8] = true;this.setState({growthMindsetClass: 'row__short__nohover'}); }
                 break;
             case 'vision':
                 flag = false;
-                for(value of this.state.visionDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.visionDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Vision</h3>' && !flag) { this.isSectionModified[9] = false; this.setState({visionClass: 'row__long'}); }
-                else { this.isSectionModified[9] = true;this.setState({visionClass: 'row__long__nohover'}); }
+                else { this.isSectionModified[9] = true; this.setState({visionClass: 'row__long__nohover'}); }
                 break;
             case 'purpose':
                 flag = false;
-                for(value of this.state.purposeDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.purposeDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Purpose</h3>' && !flag) { this.isSectionModified[10] = false; this.setState({purposeClass: 'col__short'}); }
                 else { this.isSectionModified[10] = true;this.setState({purposeClass: 'col__short__nohover'}); }
                 break;
             case 'deliberate_practices':
                 flag = false;
-                for(value of this.state.delibPracticesDragObj.values()) { if(value.visible) { flag = true; } }
+                for(val of this.state.delibPracticesDragObj.values()) { if(val.visible) { flag = true; } }
                 if(value === '<h3>Deliberate Practices</h3>' && !flag) { this.isSectionModified[11] = false; this.setState({delibPracticesClass: 'col__short'}); }
                 else { this.isSectionModified[11] = true;this.setState({delibPracticesClass: 'col__short__nohover'}); }
                 break;
@@ -934,62 +959,62 @@ class Canvas extends Component {
         switch(this.state.wizardDest) {
             case 'Stress':
                 ogText = this.stressEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2];
                 this.stressEditor.setData(newText);
                 break;
             case 'Strengths':
                 ogText = this.strengthsEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1];
                 this.strengthsEditor.setData(newText);
                 break;
             case 'Behaviors':
                 ogText = this.behaviorsEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2];
                 this.behaviorsEditor.setData(newText);
                 break;
             case 'Energy':
                 ogText = this.energyEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1];
                 this.energyEditor.setData(newText);
                 break;
             case 'Experience Bias':
                 ogText = this.expBiasEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2];
                 this.expBiasEditor.setData(newText);
                 break;
             case 'Voice':
                 ogText = this.voiceEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2];
                 this.voiceEditor.setData(newText);
                 break;
             case 'Values':
                 ogText = this.valuesEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0];
                 this.valuesEditor.setData(newText);
                 break;
             case 'Fixed Mindset':
                 ogText = this.fixedMindsetEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0];
                 this.fixedMindsetEditor.setData(newText);
                 break;
             case 'Growth Mindset':
                 ogText = this.growthMindsetEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0];
                 this.growthMindsetEditor.setData(newText);
                 break;
             case 'Vision':
                 ogText = this.visionEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2]+this.state.wizardAnswers[3]+this.state.wizardAnswers[4];
                 this.visionEditor.setData(newText);
                 break;
             case 'Purpose':
                 ogText = this.purposeEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2]+this.state.wizardAnswers[3]+this.state.wizardAnswers[4];
                 this.purposeEditor.setData(newText);
                 break;
             case 'Deliberate Practices':
                 ogText = this.delibPracticesEditor.getData();
-                newText = ogText + this.state.wizardAnswer1;
+                newText = ogText + this.state.wizardAnswers[0]+this.state.wizardAnswers[1]+this.state.wizardAnswers[2]+this.state.wizardAnswers[3]+this.state.wizardAnswers[4];
                 this.delibPracticesEditor.setData(newText);
                 break;
             default:
@@ -1907,94 +1932,107 @@ class Canvas extends Component {
 
     showWizard(id) {
         if(this.state.editorFocused) { return; }
-        this.setState({wizardAnswer1: '', wizardImgs: []})
+        this.setState({wizardAnswers: ['','','','',''], wizardImgs: []});
+        var prompts=[], visibilities = ['hidden', 'hidden', 'hidden', 'hidden', 'hidden'], visibilitiesBoolean = [false, false, false, false, false];
         switch(id) {
             case 'stress':
                 if(!this.isSectionModified[0]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Stress'});
-                    this.setState({wizardPrompt1: "How do you envision giving back to the community?"});
+                    prompts = ['What are your sources of stress?', 'What situations cause stress for you?', 'When are you most uncomfortable?'];
                 }
                 break;
             case 'strengths':
                 if(!this.isSectionModified[1]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Strengths'});
-                    this.setState({wizardPrompt1: "What are you good at?"});
+                    prompts = ['Where do you draw your strength?', 'What are you great at?'];
                 }
                 break;
             case 'behaviors':
                 if(!this.isSectionModified[2]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Behaviors'});
-                    this.setState({wizardPrompt1: "What are some behaviors that define you?"});
+                    prompts = ['Are there ways you always do things?', 'Note any patterns in your work or social life.', 'Are there things that “keep happening” in your life?'];
                 }
                 break;
             case 'energy':
                 if(!this.isSectionModified[3]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Energy'});
-                    this.setState({wizardPrompt1: "What does your energy flow look like?"});
+                    prompts = ['How do you recharge when you are rundown?', 'What helps you deal with stress?'];
                 }
                 break;
             case 'experience_bias':
                 if(!this.isSectionModified[4]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Experience Bias'});
-                    this.setState({wizardPrompt1: "How is your experience limited by your perspective?"});
+                    prompts = ['How have your lived experiences shaped your worldview?', 'What situations do you find yourself generalizing your lived experience to others’?', 'When have your behaviors or thought patterns led to misunderstanding, conflict, or failure?'];
                 }
                 break;
             case 'voice':
                 if(!this.isSectionModified[5]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Voice'});
-                    this.setState({wizardPrompt1: "What issues do you intend to address?"});
+                    prompts = ['What is different about how you view the world?', 'How do you describe your worldview to others?', 'What is it like to work with you on something?'];
                 }
                 break;
             case 'values':
                 if(!this.isSectionModified[6]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Values'});
-                    this.setState({wizardPrompt1: "What rules or principles do you live by?"});
+                    prompts = ['What principles are important and influence how you live your life?'];
                 }
                 break;
             case 'fixed_mindset':
                 if(!this.isSectionModified[7]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Fixed Mindset'});
-                    this.setState({wizardPrompt1: "In what ways do you have a fixed mindset?"});
+                    prompts = ['What areas of your life do you feel that you can’t or don’t need to change?'];
                 }
                 break;
             case 'growth_mindset':
                 if(!this.isSectionModified[8]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Growth Mindset'});
-                    this.setState({wizardPrompt1: "In what ways do you practice a mindset of growth?"});
+                    prompts = ['What areas of your life are you open to learning and adapting?'];
                 }
                 break;
             case 'vision':
                 if(!this.isSectionModified[9]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Vision'});
-                    this.setState({wizardPrompt1: "How do you envision giving back to the community?"});
+                    prompts = ['What do you want to create?', 'What impact do you want to make?', 'Encapsulate everything you would like to be, do, and have.', 'Define what success and excellence look like to you.', 'Express where you want to be in the future. It  should reflect your values, goals, purpose, and how you operate.'];
                 }
                 break;
             case 'purpose':
                 if(!this.isSectionModified[10]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Purpose'});
-                    this.setState({wizardPrompt1: "What do you live for?"});
+                    prompts = ['Why is your vision important to you?', 'What inspires you?', 'What is important to you and why is this important to you?', 'What drives your motivation?', 'What makes you get up in the morning?', 'Where do you get your energy?', 'Who do you hope to impact?'];
                 }
                 break;
             case 'deliberate_practices':
                 if(!this.isSectionModified[11]) {
                     this.setState({wizardVisible: true});
                     this.setState({wizardDest: 'Deliberate Practices'});
-                    this.setState({wizardPrompt1: "What are some intentional things you do?"});
+                    prompts = ['What do you do to overcome or “check” your bias?', 'How do you expose yourself to new experiences and perspectives?', 'Who do you turn to for advice or help?', 'What activities do you do that are purposeful or systematic to help you achieve your goals?', 'How do you put your values into practice?'];
                 }
                 break;
             default:            
         }
+
+        if(prompts) {
+            for(var i=0; i<prompts.length; i++) {
+                visibilities[i] = 'visible';
+                visibilitiesBoolean[i] = true;
+            }
+            for(i=0; i<5-prompts.length; i++) {
+                prompts.push('');
+            }
+        }
+
+        this.setState({wizardPrompts: prompts, wizardVisibilities: visibilities, wizardVisibilitiesBoolean: visibilitiesBoolean});
     }
 
     render () {
@@ -2085,46 +2123,105 @@ class Canvas extends Component {
                     open={this.state.wizardVisible}
                     onClose={this.handleCloseWizardDialog}
                 >
-                    <DialogTitle>{this.state.wizardDest} Wizard</DialogTitle>
+                    <DialogTitle>{this.state.wizardDest} Prompts</DialogTitle>
                     <DialogContent>
                     <DialogContentText>
-                        Here are a couple prompts regarding {this.state.wizardDest}. Feel free to add images and gifs!
+                        You can style your entered text on the main screen once you have finished. Feel free to add images and gifs. They will default to the upper left corner of the {this.state.wizardDest} section.
                     </DialogContentText>
+                    <div style={{visibility: this.state.wizardVisibilities[0]}}>
                     <br/>
-                    <DialogContentText variant="h6">
-                        {this.state.wizardPrompt1}
+                    <DialogContentText variant="h6" visible={false}>
+                        {this.state.wizardPrompts[0]}
                     </DialogContentText>
-                    <Grid container spacing={0}>
-                        <Grid item xs={10}>
-                            <CKEditor
-                                editor={ BalloonEditor }
-                                config={ this.editorConfiguration }
-                                data={ '' }
-                                onChange={ ( event, editor ) => {
-                                    const data = editor.getData();
-                                    this.wizardChange1(data);
-                                } }
-                            />
-                            <br/>
-                            <Grid container spacing={1}>
-                                { this.state.wizardImgs.map((img, index) => <Fragment key={index}>{img}</Fragment>) }
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={1}>
-                            <Tooltip title='Add Image'>
-                                <IconButton color="inherit" onClick={this.handleWizardImage}>
-                                    <ImageIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item xs={1}>
-                            <Tooltip title='Add Gif'>
-                                <IconButton color="inherit" onClick={this.handleWizardGif}>
-                                    <GifIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange1(data);
+                        } }
+                    />
+                    </div>
+                    
+                    {this.state.wizardVisibilitiesBoolean[1] && <div style={{visibility: this.state.wizardVisibilities[1]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[1]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange2(data);
+                        } }
+                    />
+                    </div>}
+                    
+                    {this.state.wizardVisibilitiesBoolean[2] && <div style={{visibility: this.state.wizardVisibilities[2]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[2]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange3(data);
+                        } }
+                    />
+                    </div>}
+                    
+                    {this.state.wizardVisibilitiesBoolean[3] && <div style={{visibility: this.state.wizardVisibilities[3]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[3]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange4(data);
+                        } }
+                    />
+                    </div>}
+                    
+                    {this.state.wizardVisibilitiesBoolean[4] && <div style={{visibility: this.state.wizardVisibilities[4]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[4]}
+                    </DialogContentText>
+                    <CKEditor
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange5(data);
+                        } }
+                    />
+                    </div>}
+                    <br/>
+                    <Grid container spacing={1}>
+                        { this.state.wizardImgs.map((img, index) => <Fragment key={index}>{img}</Fragment>) }
                     </Grid>
+                    <br/>
+                    <Tooltip title='Add Image'>
+                        <IconButton color="inherit" onClick={this.handleWizardImage}>
+                            <ImageIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title='Add Gif'>
+                        <IconButton color="inherit" onClick={this.handleWizardGif}>
+                            <GifIcon />
+                        </IconButton>
+                    </Tooltip>
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={this.handleCloseWizardDialog} color="primary">
