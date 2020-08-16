@@ -84,6 +84,19 @@ class Canvas extends Component {
             purposeClass: 'col__short',
             delibPracticesClass: 'col__short',
 
+            stressMobileClass: 'section__mobile',
+            strengthsMobileClass: 'section__mobile',
+            behaviorsMobileClass: 'section__mobile',
+            energyMobileClass: 'section__mobile',
+            expBiasMobileClass: 'section__mobile',
+            voiceMobileClass: 'section__mobile',
+            valuesMobileClass: 'section__mobile',
+            fixedMindsetMobileClass: 'section__mobile',
+            growthMindsetMobileClass: 'section__mobile',
+            visionMobileClass: 'section__mobile',
+            purposeMobileClass: 'section__mobile',
+            delibPracticesMobileClass: 'section__mobile',
+
             isClearDialogOpen: false,
 
             wizardVisible: false,
@@ -123,19 +136,6 @@ class Canvas extends Component {
         this.col4DivRef = React.createRef();
         this.col5DivRef = React.createRef();
         this.bottomDivRef = React.createRef();
-
-        this.row1DivRef = React.createRef();
-        this.row2DivRef = React.createRef();
-        this.row3DivRef = React.createRef();
-        this.row4DivRef = React.createRef();
-        this.row5DivRef = React.createRef();
-        this.row6DivRef = React.createRef();
-        this.row7DivRef = React.createRef();
-        this.row8DivRef = React.createRef();
-        this.row9DivRef = React.createRef();
-        this.row10DivRef = React.createRef();
-        this.row11DivRef = React.createRef();
-        this.row12DivRef = React.createRef();
 
         this.dragIndex = 0;
         this.focusedId = -1;
@@ -287,84 +287,84 @@ class Canvas extends Component {
                     this.isSectionModified[0] = false;
                     imgObj = this.state.stressDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({stressDragObj: imgObj, stressClass: 'col__short'});
+                    this.setState({stressDragObj: imgObj, stressClass: 'col__short', stressMobileClass: 'section__mobile'});
                     this.stressEditor.setData('<h3>Stress</h3>');
                     break;
                 case 'strengths':
                     this.isSectionModified[1] = false;
                     imgObj = this.state.strengthsDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({strengthsDragObj: imgObj, strengthsClass: 'col__short'});
+                    this.setState({strengthsDragObj: imgObj, strengthsClass: 'col__short', strengthsMobileClass: 'section__mobile'});
                     this.strengthsEditor.setData('<h3>Strengths</h3>');
                     break;
                 case 'behaviors':
                     this.isSectionModified[2] = false;
                     imgObj = this.state.behaviorsDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({behaviorsDragObj: imgObj, behaviorsClass: 'col__short'});
+                    this.setState({behaviorsDragObj: imgObj, behaviorsClass: 'col__short', behaviorsMobileClass: 'section__mobile'});
                     this.behaviorsEditor.setData('<h3>Behaviors</h3>');
                     break;
                 case 'energy':
                     this.isSectionModified[3] = false;
                     imgObj = this.state.energyDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({energyDragObj: imgObj, energyClass: 'col__short'});
+                    this.setState({energyDragObj: imgObj, energyClass: 'col__short', energyMobileClass: 'section__mobile'});
                     this.energyEditor.setData('<h3>Energy</h3>');
                     break;
                 case 'experience_bias':
                     this.isSectionModified[4] = false;
                     imgObj = this.state.expBiasDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({expBiasDragObj: imgObj, expBiasClass: 'col__long'});
+                    this.setState({expBiasDragObj: imgObj, expBiasClass: 'col__long', expBiasMobileClass: 'section__mobile'});
                     this.expBiasEditor.setData('<h3>Experience Bias</h3>');
                     break;
                 case 'voice':
                     this.isSectionModified[5] = false;
                     imgObj = this.state.voiceDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({voiceDragObj: imgObj, voiceClass: 'col__long'});
+                    this.setState({voiceDragObj: imgObj, voiceClass: 'col__long', voiceMobileClass: 'section__mobile'});
                     this.voiceEditor.setData('<h3>Voice</h3>');
                     break;
                 case 'values':
                     this.isSectionModified[6] = false;
                     imgObj = this.state.valuesDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({valuesDragObj: imgObj, valuesClass: 'col__short__short'});
+                    this.setState({valuesDragObj: imgObj, valuesClass: 'col__short__short', valuesMobileClass: 'section__mobile'});
                     this.valuesEditor.setData('<h3>Values</h3>');
                     break;
                 case 'fixed_mindset':
                     this.isSectionModified[7] = false;
                     imgObj = this.state.fixedMindsetDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({fixedMindsetDragObj: imgObj, fixedMindsetClass: 'row__short'});
+                    this.setState({fixedMindsetDragObj: imgObj, fixedMindsetClass: 'row__short', fixedMindsetMobileClass: 'section__mobile'});
                     this.fixedMindsetEditor.setData('<h3>Fixed Mindset</h3>');
                     break;
                 case 'growth_mindset':
                     this.isSectionModified[8] = false;
                     imgObj = this.state.growthMindsetDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({growthMindsetDragObj: imgObj, growthMindsetClass: 'row__short'});
+                    this.setState({growthMindsetDragObj: imgObj, growthMindsetClass: 'row__short', growthMindsetMobileClass: 'section__mobile'});
                     this.growthMindsetEditor.setData('<h3>Growth Mindset</h3>');
                     break;
                 case 'vision':
                     this.isSectionModified[9] = false;
                     imgObj = this.state.visionDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({visionDragObj: imgObj, visionClass: 'row__long'})
+                    this.setState({visionDragObj: imgObj, visionClass: 'row__long', visionMobileClass: 'section__mobile'})
                     this.visionEditor.setData('<h3>Vision</h3>');
                     break;
                 case 'purpose':
                     this.isSectionModified[10] = false;
                     imgObj = this.state.purposeDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({purposeDragObj: imgObj, purposeClass: 'col__short'});
+                    this.setState({purposeDragObj: imgObj, purposeClass: 'col__short', purposeMobileClass: 'section__mobile'});
                     this.purposeEditor.setData('<h3>Purpose</h3>');
                     break;
                 case 'deliberate_practices':
                     this.isSectionModified[11] = false;
                     imgObj = this.state.delibPracticesDragObj;
                     for(const key of imgObj.keys()) { imgObj.get(key).visible = false; }
-                    this.setState({delibPracticesDragObj: imgObj, delibPracticesClass: 'col__short'});
+                    this.setState({delibPracticesDragObj: imgObj, delibPracticesClass: 'col__short', delibPracticesMobileClass: 'section__mobile'});
                     this.delibPracticesEditor.setData('<h3>Deliberate Practices</h3>');
                     break;
                 default:
@@ -416,7 +416,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.stressDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[0] = false; this.setState({stressDragObj: imgObj, stressClass: 'col__short'}); }
+                if(!flag) { this.isSectionModified[0] = false; this.setState({stressDragObj: imgObj, stressClass: 'col__short', stressMobileClass: 'section__mobile'}); }
                 else { this.setState({stressDragObj: imgObj}); }
                 break;
             case 'strengths':
@@ -424,7 +424,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.strengthsDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[1] = false; this.setState({strengthsDragObj: imgObj, strengthsClass: 'col__short'}); }
+                if(!flag) { this.isSectionModified[1] = false; this.setState({strengthsDragObj: imgObj, strengthsClass: 'col__short', strengthsMobileClass: 'section__mobile'}); }
                 else { this.setState({strengthsDragObj: imgObj}); }
                 break;
             case 'behaviors':
@@ -432,7 +432,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.behaviorsDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[2] = false; this.setState({behaviorsDragObj: imgObj, behaviorsClass: 'col__short'}); }
+                if(!flag) { this.isSectionModified[2] = false; this.setState({behaviorsDragObj: imgObj, behaviorsClass: 'col__short', behaviorsMobileClass: 'section__mobile'}); }
                 else { this.setState({behaviorsDragObj: imgObj}); }
                 break;
             case 'energy':
@@ -440,7 +440,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.energyDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[3] = false; this.setState({energyDragObj: imgObj, energyClass: 'col__short'}); }
+                if(!flag) { this.isSectionModified[3] = false; this.setState({energyDragObj: imgObj, energyClass: 'col__short', energyMobileClass: 'section__mobile'}); }
                 else { this.setState({energyDragObj: imgObj}); }
                 break;
             case 'experience_bias':
@@ -448,7 +448,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.expBiasDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[4] = false; this.setState({expBiasDragObj: imgObj, expBiasClass: 'col__long'}); }
+                if(!flag) { this.isSectionModified[4] = false; this.setState({expBiasDragObj: imgObj, expBiasClass: 'col__long', expBiasMobileClass: 'section__mobile'}); }
                 else { this.setState({expBiasDragObj: imgObj}); }
                 break;
             case 'voice':
@@ -456,7 +456,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.voiceDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[5] = false; this.setState({voiceDragObj: imgObj, voiceClass: 'col__long'}); }
+                if(!flag) { this.isSectionModified[5] = false; this.setState({voiceDragObj: imgObj, voiceClass: 'col__long', voiceMobileClass: 'section__mobile'}); }
                 else { this.setState({voiceDragObj: imgObj}); }
                 break;
             case 'values':
@@ -464,7 +464,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.valuesDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[6] = false; this.setState({valuesDragObj: imgObj, valuesClass: 'col__short__short'}); }
+                if(!flag) { this.isSectionModified[6] = false; this.setState({valuesDragObj: imgObj, valuesClass: 'col__short__short', valuesMobileClass: 'section__mobile'}); }
                 else { this.setState({valuesDragObj: imgObj}); }
                 break;
             case 'fixed_mindset':
@@ -472,7 +472,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.fixedMindsetDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[7] = false; this.setState({fixedMindsetDragObj: imgObj, fixedMindsetClass: 'row__short'}); }
+                if(!flag) { this.isSectionModified[7] = false; this.setState({fixedMindsetDragObj: imgObj, fixedMindsetClass: 'row__short', fixedMindsetMobileClass: 'section__mobile'}); }
                 else { this.setState({fixedMindsetDragObj: imgObj}); }
                 break;
             case 'growth_mindset':
@@ -480,7 +480,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.growthMindsetDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[8] = false; this.setState({growthMindsetDragObj: imgObj, growthMindsetClass: 'row__short'}); }
+                if(!flag) { this.isSectionModified[8] = false; this.setState({growthMindsetDragObj: imgObj, growthMindsetClass: 'row__short', growthMindsetMobileClass: 'section__mobile'}); }
                 else { this.setState({growthMindsetDragObj: imgObj}); }
                 break;
             case 'vision':
@@ -488,7 +488,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.visionDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[9] = false; this.setState({visionDragObj: imgObj, visionClass: 'row__long'}); }
+                if(!flag) { this.isSectionModified[9] = false; this.setState({visionDragObj: imgObj, visionClass: 'row__long', visionMobileClass: 'section__mobile'}); }
                 else { this.setState({visionDragObj: imgObj}); }
                 break;
             case 'purpose':
@@ -496,7 +496,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.purposeDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[10] = false; this.setState({purposeDragObj: imgObj, purposeClass: 'col__short'}); }
+                if(!flag) { this.isSectionModified[10] = false; this.setState({purposeDragObj: imgObj, purposeClass: 'col__short', purposeMobileClass: 'section__mobile'}); }
                 else { this.setState({purposeDragObj: imgObj}); }
                 break;
             case 'deliberate_practices':
@@ -504,7 +504,7 @@ class Canvas extends Component {
                 imgObj.get(key).visible = false;
                 flag = false;
                 for(value of this.state.delibPracticesDragObj.values()) { if(value.visible) { flag = true; } }
-                if(!flag) { this.isSectionModified[11] = false; this.setState({delibPracticesDragObj: imgObj, delibPracticesClass: 'col__short'}); }
+                if(!flag) { this.isSectionModified[11] = false; this.setState({delibPracticesDragObj: imgObj, delibPracticesClass: 'col__short', delibPracticesMobileClass: 'section__mobile'}); }
                 else { this.setState({delibPracticesDragObj: imgObj}); }
                 break;
             default:
@@ -574,74 +574,74 @@ class Canvas extends Component {
             case 'stress':
                 flag = false;
                 for(val of this.state.stressDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Stress</h3>' && !flag) { this.isSectionModified[0] = false; this.setState({stressClass: 'col__short'}); }
-                else { this.isSectionModified[0] = true; this.setState({stressClass: 'col__short__nohover'}); }
+                if(value === '<h3>Stress</h3>' && !flag) { this.isSectionModified[0] = false; this.setState({stressClass: 'col__short', stressMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[0] = true; this.setState({stressClass: 'col__short__nohover', stressMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'strengths':
                 flag = false;
                 for(val of this.state.strengthsDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Strengths</h3>' && !flag) { this.isSectionModified[1] = false; this.setState({strengthsClass: 'col__short'}); }
-                else { this.isSectionModified[1] = true;this.setState({strengthsClass: 'col__short__nohover'}); }
+                if(value === '<h3>Strengths</h3>' && !flag) { this.isSectionModified[1] = false; this.setState({strengthsClass: 'col__short', strengthsMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[1] = true;this.setState({strengthsClass: 'col__short__nohover', strengthsMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'behaviors':
                 flag = false;
                 for(val of this.state.behaviorsDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Behaviors</h3>' && !flag) { this.isSectionModified[2] = false; this.setState({behaviorsClass: 'col__short'}); }
-                else { this.isSectionModified[2] = true;this.setState({behaviorsClass: 'col__short__nohover'}); }
+                if(value === '<h3>Behaviors</h3>' && !flag) { this.isSectionModified[2] = false; this.setState({behaviorsClass: 'col__short', behaviorsMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[2] = true;this.setState({behaviorsClass: 'col__short__nohover', behaviorsMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'energy':
                 flag = false;
                 for(val of this.state.energyDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Energy</h3>' && !flag) { this.isSectionModified[3] = false; this.setState({energyClass: 'col__short'}); }
-                else { this.isSectionModified[3] = true;this.setState({energyClass: 'col__short__nohover'}); }
+                if(value === '<h3>Energy</h3>' && !flag) { this.isSectionModified[3] = false; this.setState({energyClass: 'col__short', energyMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[3] = true;this.setState({energyClass: 'col__short__nohover', energyMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'experience_bias':
                 flag = false;
                 for(val of this.state.expBiasDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Experience Bias</h3>' && !flag) { this.isSectionModified[4] = false; this.setState({expBiasClass: 'col__long'}); }
-                else { this.isSectionModified[4] = true;this.setState({expBiasClass: 'col__long__nohover'}); }
+                if(value === '<h3>Experience Bias</h3>' && !flag) { this.isSectionModified[4] = false; this.setState({expBiasClass: 'col__long', expBiasMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[4] = true;this.setState({expBiasClass: 'col__long__nohover', expBiasMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'voice':
                 flag = false;
                 for(val of this.state.voiceDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Voice</h3>' && !flag) { this.isSectionModified[5] = false; this.setState({voiceClass: 'col__long'}); }
-                else { this.isSectionModified[5] = true;this.setState({voiceClass: 'col__long__nohover'}); }
+                if(value === '<h3>Voice</h3>' && !flag) { this.isSectionModified[5] = false; this.setState({voiceClass: 'col__long', voiceMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[5] = true;this.setState({voiceClass: 'col__long__nohover', voiceMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'values':
                 flag = false;
                 for(val of this.state.valuesDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Values</h3>' && !flag) { this.isSectionModified[6] = false; this.setState({valuesClass: 'col__short__short'}); }
-                else { this.isSectionModified[6] = true;this.setState({valuesClass: 'col__short__short__nohover'}); }
+                if(value === '<h3>Values</h3>' && !flag) { this.isSectionModified[6] = false; this.setState({valuesClass: 'col__short__short', valuesMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[6] = true;this.setState({valuesClass: 'col__short__short__nohover', valuesMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'fixed_mindset':
                 flag = false;
                 for(val of this.state.fixedMindsetDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Fixed Mindset</h3>' && !flag) { this.isSectionModified[7] = false; this.setState({fixedMindsetClass: 'row__short'}); }
-                else { this.isSectionModified[7] = true;this.setState({fixedMindsetClass: 'row__short__nohover'}); }
+                if(value === '<h3>Fixed Mindset</h3>' && !flag) { this.isSectionModified[7] = false; this.setState({fixedMindsetClass: 'row__short', fixedMindsetMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[7] = true;this.setState({fixedMindsetClass: 'row__short__nohover', fixedMindsetMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'growth_mindset':
                 flag = false;
                 for(val of this.state.growthMindsetDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Growth Mindset</h3>' && !flag) { this.isSectionModified[8] = false; this.setState({growthMindsetClass: 'row__short'}); }
-                else { this.isSectionModified[8] = true;this.setState({growthMindsetClass: 'row__short__nohover'}); }
+                if(value === '<h3>Growth Mindset</h3>' && !flag) { this.isSectionModified[8] = false; this.setState({growthMindsetClass: 'row__short', growthMindsetMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[8] = true;this.setState({growthMindsetClass: 'row__short__nohover', growthMindsetMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'vision':
                 flag = false;
                 for(val of this.state.visionDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Vision</h3>' && !flag) { this.isSectionModified[9] = false; this.setState({visionClass: 'row__long'}); }
-                else { this.isSectionModified[9] = true; this.setState({visionClass: 'row__long__nohover'}); }
+                if(value === '<h3>Vision</h3>' && !flag) { this.isSectionModified[9] = false; this.setState({visionClass: 'row__long', visionMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[9] = true; this.setState({visionClass: 'row__long__nohover', visionMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'purpose':
                 flag = false;
                 for(val of this.state.purposeDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Purpose</h3>' && !flag) { this.isSectionModified[10] = false; this.setState({purposeClass: 'col__short'}); }
-                else { this.isSectionModified[10] = true;this.setState({purposeClass: 'col__short__nohover'}); }
+                if(value === '<h3>Purpose</h3>' && !flag) { this.isSectionModified[10] = false; this.setState({purposeClass: 'col__short', purposeMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[10] = true;this.setState({purposeClass: 'col__short__nohover', purposeMobileClass: 'section__mobile__nohover'}); }
                 break;
             case 'deliberate_practices':
                 flag = false;
                 for(val of this.state.delibPracticesDragObj.values()) { if(val.visible) { flag = true; } }
-                if(value === '<h3>Deliberate Practices</h3>' && !flag) { this.isSectionModified[11] = false; this.setState({delibPracticesClass: 'col__short'}); }
-                else { this.isSectionModified[11] = true;this.setState({delibPracticesClass: 'col__short__nohover'}); }
+                if(value === '<h3>Deliberate Practices</h3>' && !flag) { this.isSectionModified[11] = false; this.setState({delibPracticesClass: 'col__short', delibPracticesMobileClass: 'section__mobile'}); }
+                else { this.isSectionModified[11] = true;this.setState({delibPracticesClass: 'col__short__nohover', delibPracticesMobileClass: 'section__mobile__nohover'}); }
                 break;
             default:            
         }
@@ -652,6 +652,7 @@ class Canvas extends Component {
     getTextCard(text, id) {
         return (
             <CKEditor
+                disabled={ isMobile }
                 editor={ BalloonEditor }
                 config={ this.editorConfiguration }
                 data={ text }
@@ -779,91 +780,43 @@ class Canvas extends Component {
     }
 
     constructDragDBArray(id) {
-        var dragArray, secWidth=0, secHeight=0;
+        var dragArray;
         switch(id) {
             case 'stress':
                 dragArray = [...this.state.stressDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row1DivRef.current.offsetWidth;
-                    secHeight = this.row1DivRef.current.offsetHeight;
-                }
                 break;
             case 'strengths':
                 dragArray = [...this.state.strengthsDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row2DivRef.current.offsetWidth;
-                    secHeight = this.row2DivRef.current.offsetHeight;
-                }
                 break;
             case 'behaviors':
                 dragArray = [...this.state.behaviorsDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row3DivRef.current.offsetWidth;
-                    secHeight = this.row3DivRef.current.offsetHeight;
-                }
                 break;
             case 'energy':
                 dragArray = [...this.state.energyDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row4DivRef.current.offsetWidth;
-                    secHeight = this.row4DivRef.current.offsetHeight;
-                }
                 break;
             case 'experience_bias':
                 dragArray = [...this.state.expBiasDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row5DivRef.current.offsetWidth;
-                    secHeight = this.row5DivRef.current.offsetHeight;
-                }
                 break;
             case 'voice':
                 dragArray = [...this.state.voiceDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row6DivRef.current.offsetWidth;
-                    secHeight = this.row6DivRef.current.offsetHeight;
-                }
                 break;
             case 'values':
                 dragArray = [...this.state.valuesDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row7DivRef.current.offsetWidth;
-                    secHeight = this.row7DivRef.current.offsetHeight;
-                }
                 break;
             case 'fixed_mindset':
                 dragArray = [...this.state.fixedMindsetDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row8DivRef.current.offsetWidth;
-                    secHeight = this.row8DivRef.current.offsetHeight;
-                }
                 break;
             case 'growth_mindset':
                 dragArray = [...this.state.growthMindsetDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row9DivRef.current.offsetWidth;
-                    secHeight = this.row9DivRef.current.offsetHeight;
-                }
                 break;
             case 'vision':
                 dragArray = [...this.state.visionDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row10DivRef.current.offsetWidth;
-                    secHeight = this.row10DivRef.current.offsetHeight;
-                }
                 break;
             case 'purpose':
                 dragArray = [...this.state.purposeDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row11DivRef.current.offsetWidth;
-                    secHeight = this.row11DivRef.current.offsetHeight;
-                }
                 break;
             case 'deliberate_practices':
                 dragArray = [...this.state.delibPracticesDragObj.values()];
-                if(isMobile) {
-                    secWidth = this.row12DivRef.current.offsetWidth;
-                    secHeight = this.row12DivRef.current.offsetHeight;
-                }
                 break;
             default:
         }
@@ -1031,73 +984,73 @@ class Canvas extends Component {
                     this.isSectionModified[0] = true;
                     map = this.state.stressDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({stressDragObj: map, stressClass: 'col__short__nohover'});
+                    this.setState({stressDragObj: map, stressClass: 'col__short__nohover', stressMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Strengths':
                     this.isSectionModified[1] = true;
                     map = this.state.strengthsDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover'});
+                    this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover', strengthsMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Behaviors':
                     this.isSectionModified[2] = true;
                     map = this.state.behaviorsDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover'});
+                    this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover', behaviorsMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Energy':
                     this.isSectionModified[3] = true;
                     map = this.state.energyDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({energyDragObj: map, energyClass: 'col__short__nohover'});
+                    this.setState({energyDragObj: map, energyClass: 'col__short__nohover', energyMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Experience Bias':
                     this.isSectionModified[4] = true;
                     map = this.state.expBiasDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover'});
+                    this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover', expBiasMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Voice':
                     this.isSectionModified[5] = true;
                     map = this.state.voiceDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover'});
+                    this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover', voiceMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Values':
                     this.isSectionModified[6] = true;
                     map = this.state.valuesDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover'});
+                    this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover', valuesMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Fixed Mindset':
                     this.isSectionModified[7] = true;
                     map = this.state.fixedMindsetDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover'});
+                    this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover', fixedMindsetMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Growth Mindset':
                     this.isSectionModified[8] = true;
                     map = this.state.growthMindsetDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover'});
+                    this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover', growthMindsetMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Vision':
                     this.isSectionModified[9] = true;
                     map = this.state.visionDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({visionDragObj: map, visionClass: 'row__long__nohover'});
+                    this.setState({visionDragObj: map, visionClass: 'row__long__nohover', visionMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'Purpose':
                     this.isSectionModified[10] = true;
                     map = this.state.purposeDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover'});
+                    this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover', purposeMobileClass: 'col__short__nohover'});
                     break;
                 case 'Deliberate Practices':
                     this.isSectionModified[11] = true;
                     map = this.state.delibPracticesDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover'});
+                    this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover', delibPracticesMobileClass: 'col__short__nohover'});
                     break;
                 default:            
             }
@@ -1163,73 +1116,73 @@ class Canvas extends Component {
                     this.isSectionModified[0] = true;
                     map = this.state.stressDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({stressDragObj: map, stressClass: 'col__short__nohover'});
+                    this.setState({stressDragObj: map, stressClass: 'col__short__nohover', stressMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'strengths':
                     this.isSectionModified[1] = true;
                     map = this.state.strengthsDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover'});
+                    this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover', strengthsMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'behaviors':
                     this.isSectionModified[2] = true;
                     map = this.state.behaviorsDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover'});
+                    this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover', behaviorsMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'energy':
                     this.isSectionModified[3] = true;
                     map = this.state.energyDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({energyDragObj: map, energyClass: 'col__short__nohover'});
+                    this.setState({energyDragObj: map, energyClass: 'col__short__nohover', energyMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'experience_bias':
                     this.isSectionModified[4] = true;
                     map = this.state.expBiasDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover'});
+                    this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover', expBiasMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'voice':
                     this.isSectionModified[5] = true;
                     map = this.state.voiceDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover'});
+                    this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover', voiceMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'values':
                     this.isSectionModified[6] = true;
                     map = this.state.valuesDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover'});
+                    this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover', valuesMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'fixed_mindset':
                     this.isSectionModified[7] = true;
                     map = this.state.fixedMindsetDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover'});
+                    this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover', fixedMindsetMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'growth_mindset':
                     this.isSectionModified[8] = true;
                     map = this.state.growthMindsetDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover'});
+                    this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover', growthMindsetMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'vision':
                     this.isSectionModified[9] = true;
                     map = this.state.visionDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({visionDragObj: map, visionClass: 'row__long__nohover'});
+                    this.setState({visionDragObj: map, visionClass: 'row__long__nohover', visionMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'purpose':
                     this.isSectionModified[10] = true;
                     map = this.state.purposeDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover'});
+                    this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover', purposeMobileClass: 'section__mobile__nohover'});
                     break;
                 case 'deliberate_practices':
                     this.isSectionModified[11] = true;
                     map = this.state.delibPracticesDragObj;
                     map.set(this.dragIndex, imgObj);
-                    this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover'});
+                    this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover', delibPracticesMobileClass: 'section__mobile__nohover'});
                     break;
                 default:            
             }
@@ -1643,73 +1596,73 @@ class Canvas extends Component {
                 this.isSectionModified[0] = true;
                 map = this.state.stressDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({stressDragObj: map, stressClass: 'col__short__nohover'});
+                this.setState({stressDragObj: map, stressClass: 'col__short__nohover', stressMobileClass: 'section__mobile__nohover'});
                 break;
             case 'strengths':
                 this.isSectionModified[1] = true;
                 map = this.state.strengthsDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover'});
+                this.setState({strengthsDragObj: map, strengthsClass: 'col__short__nohover', strengthsMobileClass: 'section__mobile__nohover'});
                 break;
             case 'behaviors':
                 this.isSectionModified[2] = true;
                 map = this.state.behaviorsDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover'});
+                this.setState({behaviorsDragObj: map, behaviorsClass: 'col__short__nohover', behaviorsMobileClass: 'section__mobile__nohover'});
                 break;
             case 'energy':
                 this.isSectionModified[3] = true;
                 map = this.state.energyDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({energyDragObj: map, energyClass: 'col__short__nohover'});
+                this.setState({energyDragObj: map, energyClass: 'col__short__nohover', energyMobileClass: 'section__mobile__nohover'});
                 break;
             case 'experience_bias':
                 this.isSectionModified[4] = true;
                 map = this.state.expBiasDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover'});
+                this.setState({expBiasDragObj: map, expBiasClass: 'col__long__nohover', expBiasMobileClass: 'section__mobile__nohover'});
                 break;
             case 'voice':
                 this.isSectionModified[5] = true;
                 map = this.state.voiceDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover'});
+                this.setState({voiceDragObj: map, voiceClass: 'col__long__nohover', voiceMobileClass: 'section__mobile__nohover'});
                 break;
             case 'values':
                 this.isSectionModified[6] = true;
                 map = this.state.valuesDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover'});
+                this.setState({valuesDragObj: map, valuesClass: 'col__short__short__nohover', valuesMobileClass: 'section__mobile__nohover'});
                 break;
             case 'fixed_mindset':
                 this.isSectionModified[7] = true;
                 map = this.state.fixedMindsetDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover'});
+                this.setState({fixedMindsetDragObj: map, fixedMindsetClass: 'row__short__nohover', fixedMindsetMobileClass: 'section__mobile__nohover'});
                 break;
             case 'growth_mindset':
                 this.isSectionModified[8] = true;
                 map = this.state.growthMindsetDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover'});
+                this.setState({growthMindsetDragObj: map, growthMindsetClass: 'row__short__nohover', growthMindsetMobileClass: 'section__mobile__nohover'});
                 break;
             case 'vision':
                 this.isSectionModified[9] = true;
                 map = this.state.visionDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({visionDragObj: map, visionClass: 'row__long__nohover'});
+                this.setState({visionDragObj: map, visionClass: 'row__long__nohover', visionMobileClass: 'section__mobile__nohover'});
                 break;
             case 'purpose':
                 this.isSectionModified[10] = true;
                 map = this.state.purposeDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover'});
+                this.setState({purposeDragObj: map, purposeClass: 'col__short__nohover', purposeMobileClass: 'section__mobile__nohover'});
                 break;
             case 'deliberate_practices':
                 this.isSectionModified[11] = true;
                 map = this.state.delibPracticesDragObj;
                 map.set(this.dragIndex, imgObj);
-                this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover'});
+                this.setState({delibPracticesDragObj: map, delibPracticesClass: 'col__short__nohover', delibPracticesMobileClass: 'section__mobile__nohover'});
                 break;
             default:            
         }
@@ -2424,7 +2377,7 @@ class Canvas extends Component {
 
     getMobileLayout() {
         return (
-            <div>
+            <div style={{visibility: this.state.canvasVisible}}>
                 <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.isDialogOpen}>
                     {this.getSearchHeader()}
                     <DialogContent>
@@ -2462,9 +2415,144 @@ class Canvas extends Component {
                     </DialogContent>
                 </Dialog>
 
+                <Dialog
+                    open={this.state.isClearDialogOpen}
+                    onClose={this.handleCloseClearDialog}
+                >
+                    <DialogTitle>Clear Canvas Section</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Are you sure you want to clear this section? This cannot be reversed.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseClearDialog} color="primary">
+                            No
+                        </Button>
+                        <Button onClick={this.handleClearSection} color="primary" >
+                            Yes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    disableEnforceFocus={false}
+                    open={this.state.wizardVisible}
+                    onClose={this.handleCloseWizardDialog}
+                >
+                    <DialogTitle>{this.state.wizardDest} Prompts</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText>
+                        You can style your entered text on the main screen once you have finished. Feel free to add images and gifs. They will default to the upper left corner of the {this.state.wizardDest} section.
+                    </DialogContentText>
+                    <div style={{visibility: this.state.wizardVisibilities[0]}}>
+                    <br/>
+                    <DialogContentText variant="h6" visible={false}>
+                        {this.state.wizardPrompts[0]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange1(data);
+                        } }
+                    />
+                    </div>
+                    
+                    {this.state.wizardVisibilitiesBoolean[1] && <div style={{visibility: this.state.wizardVisibilities[1]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[1]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange2(data);
+                        } }
+                    />
+                    </div>}
+                    
+                    {this.state.wizardVisibilitiesBoolean[2] && <div style={{visibility: this.state.wizardVisibilities[2]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[2]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange3(data);
+                        } }
+                    />
+                    </div>}
+                    
+                    {this.state.wizardVisibilitiesBoolean[3] && <div style={{visibility: this.state.wizardVisibilities[3]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[3]}
+                    </DialogContentText>
+                    <CKEditor 
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange4(data);
+                        } }
+                    />
+                    </div>}
+                    
+                    {this.state.wizardVisibilitiesBoolean[4] && <div style={{visibility: this.state.wizardVisibilities[4]}}>
+                    <br/>
+                    <DialogContentText variant="h6" >
+                        {this.state.wizardPrompts[4]}
+                    </DialogContentText>
+                    <CKEditor
+                        editor={ BalloonEditor }
+                        config={ this.editorConfiguration }
+                        data={ '' }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.wizardChange5(data);
+                        } }
+                    />
+                    </div>}
+                    <br/>
+                    <Grid container spacing={1}>
+                        { this.state.wizardImgs.map((img, index) => <Fragment key={index}>{img}</Fragment>) }
+                    </Grid>
+                    <br/>
+                    <Tooltip title='Add Image'>
+                        <IconButton color="inherit" onClick={this.handleWizardImage}>
+                            <ImageIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title='Add Gif'>
+                        <IconButton color="inherit" onClick={this.handleWizardGif}>
+                            <GifIcon />
+                        </IconButton>
+                    </Tooltip>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={this.handleCloseWizardDialog} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={this.handleWizardDoneDialog} color="primary" >
+                        Done
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+
                 <MaterialNavBar loggedIn={this.state.loggedIn} title='My Canvas'/>
 
-                <br/><br/><br/><br/><br/>
+                <br/><br/><br/><br/>
 
                 <div style={{display: 'flex', flexDirection: 'row'}}>
 
@@ -2496,125 +2584,151 @@ class Canvas extends Component {
                     <br/>
                     <Spinner className='loader' color='lightgray' style={{visibility: this.state.loaderVisibility}}/>
                     <br/>
-                    <div className='row1' ref={this.row1DivRef}>
-                        <MenuProvider id='stress_context' >
-                            <this.stressContext />
-                            <div className='col__short__mobile'  >
-                                {this.getTextCard(this.state.stress, 'stress')} 
-                                { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+
+                    <MenuProvider id='vision_context' >
+                        <this.visionContext />
+                        <div className={this.state.visionMobileClass} onClick={() => this.showWizard('vision')}>
+                            {this.getTextCard(this.state.vision, 'vision')}        
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row2' ref={this.row2DivRef}>
-                        <MenuProvider id='strengths_context' >
-                            <this.strengthsContext />
-                            <div className='col__short__mobile' >
-                                {this.getTextCard(this.state.strengths, 'strengths')} 
-                                { [...this.state.strengthsDragObj.values()].map((img, index) => [...this.state.strengthsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='stress_context' >
+                        <this.stressContext />
+                        <div className={this.state.stressMobileClass} onClick={() => this.showWizard('stress')}>
+                            {this.getTextCard(this.state.stress, 'stress')} 
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.stressDragObj.values()].map((img, index) => [...this.state.stressDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row3' ref={this.row3DivRef}>
-                        <MenuProvider id='behaviors_context' >
-                            <this.behaviorsContext />
-                            <div className='col__short__mobile' >
-                                {this.getTextCard(this.state.behaviors, 'behaviors')} 
-                                { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='behaviors_context' >
+                        <this.behaviorsContext />
+                        <div className={this.state.behaviorsMobileClass} onClick={() => this.showWizard('behaviors')}>
+                            {this.getTextCard(this.state.behaviors, 'behaviors')} 
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.behaviorsDragObj.values()].map((img, index) => [...this.state.behaviorsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row4' ref={this.row4DivRef}>
-                        <MenuProvider id='energy_context' >
-                            <this.energyContext />
-                            <div className='col__short__mobile' >
-                                {this.getTextCard(this.state.energy, 'energy')}
-                                { [...this.state.energyDragObj.values()].map((img, index) => [...this.state.energyDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='experience_bias_context' >
+                        <this.expBiasContext />
+                        <div className={this.state.expBiasMobileClass} onClick={() => this.showWizard('experience_bias')}>
+                            {this.getTextCard(this.state.experience_bias, 'experience_bias')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row5' ref={this.row5DivRef}>
-                        <MenuProvider id='experience_bias_context' >
-                            <this.expBiasContext />
-                            <div className='col__long__mobile' >
-                                {this.getTextCard(this.state.experience_bias, 'experience_bias')}
-                                { [...this.state.expBiasDragObj.values()].map((img, index) => [...this.state.expBiasDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='deliberate_practices_context' >
+                        <this.delibPracticesContext />
+                        <div className={this.state.delibPracticesMobileClass} onClick={() => this.showWizard('deliberate_practices')}>
+                            {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row6' ref={this.row6DivRef}>
-                        <MenuProvider id='voice_context' >
-                            <this.voiceContext />
-                            <div className='col__long__mobile' >
-                                {this.getTextCard(this.state.voice, 'voice')}
-                                { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='purpose_context' >
+                        <this.purposeContext />
+                        <div className={this.state.purposeMobileClass} onClick={() => this.showWizard('purpose')}>
+                            {this.getTextCard(this.state.purpose, 'purpose')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row7' ref={this.row7DivRef}>
-                        <MenuProvider id='values_context' >
-                            <this.valuesContext />
-                            <div className='col__short__short__mobile' >
-                                {this.getTextCard(this.state.values, 'values')}
-                                { [...this.state.valuesDragObj.values()].map((img, index) => [...this.state.valuesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='voice_context' >
+                        <this.voiceContext />
+                        <div className={this.state.voiceMobileClass} onClick={() => this.showWizard('voice')}>
+                            {this.getTextCard(this.state.voice, 'voice')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.voiceDragObj.values()].map((img, index) => [...this.state.voiceDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row8' ref={this.row8DivRef}>
-                        <MenuProvider id='fixed_mindset_context' >
-                            <this.fixedMindsetContext />
-                            <div className='row__short__mobile' >
-                                {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
-                                { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='strengths_context' >
+                        <this.strengthsContext />
+                        <div className={this.state.strengthsMobileClass} onClick={() => this.showWizard('strengths')}>
+                            {this.getTextCard(this.state.strengths, 'strengths')} 
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.strengthsDragObj.values()].map((img, index) => [...this.state.strengthsDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row9' ref={this.row9DivRef}>
-                        <MenuProvider id='growth_mindset_context' >
-                            <this.growthMindsetContext />
-                            <div className='row__short__mobile' >
-                                {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
-                                { [...this.state.growthMindsetDragObj.values()].map((img, index) => [...this.state.growthMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='energy_context' >
+                        <this.energyContext />
+                        <div className={this.state.energyMobileClass}  onClick={() => this.showWizard('energy')}>
+                            {this.getTextCard(this.state.energy, 'energy')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.energyDragObj.values()].map((img, index) => [...this.state.energyDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row10' ref={this.row10DivRef}>
-                        <MenuProvider id='vision_context' >
-                            <this.visionContext />
-                            <div className='row__long__mobile' >
-                                {this.getTextCard(this.state.vision, 'vision')}        
-                                { [...this.state.visionDragObj.values()].map((img, index) => [...this.state.visionDragObj.values()][index].visible &&  <Fragment key={index}>{img.dragComp}</Fragment>) }                         
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='fixed_mindset_context' >
+                        <this.fixedMindsetContext />
+                        <div className={this.state.fixedMindsetMobileClass} onClick={() => this.showWizard('fixed_mindset')}>
+                            {this.getTextCard(this.state.fixed_mindset, 'fixed_mindset')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.fixedMindsetDragObj.values()].map((img, index) => [...this.state.fixedMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row11' ref={this.row11DivRef}>
-                        <MenuProvider id='purpose_context' >
-                            <this.purposeContext />
-                            <div className='col__short__mobile' >
-                                {this.getTextCard(this.state.purpose, 'purpose')}
-                                { [...this.state.purposeDragObj.values()].map((img, index) => [...this.state.purposeDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='values_context' >
+                        <this.valuesContext />
+                        <div className={this.state.valuesMobileClass} onClick={() => this.showWizard('values')}>
+                            {this.getTextCard(this.state.values, 'values')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.valuesDragObj.values()].map((img, index) => [...this.state.valuesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
-                    <br/><br/>
-                    <div className='row12' ref={this.row12DivRef}>
-                        <MenuProvider id='deliberate_practices_context' >
-                            <this.delibPracticesContext />
-                            <div className='col__short__mobile' >
-                                {this.getTextCard(this.state.deliberate_practices, 'deliberate_practices')}
-                                { [...this.state.delibPracticesDragObj.values()].map((img, index) => [...this.state.delibPracticesDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
-                            </div>
-                        </MenuProvider>
+                    <br/>
+
+                    <MenuProvider id='growth_mindset_context' >
+                        <this.growthMindsetContext />
+                        <div className={this.state.growthMindsetMobileClass} onClick={() => this.showWizard('growth_mindset')}>
+                            {this.getTextCard(this.state.growth_mindset, 'growth_mindset')}
+                        </div>
+                    </MenuProvider>
+
+                    <div>
+                        { [...this.state.growthMindsetDragObj.values()].map((img, index) => [...this.state.growthMindsetDragObj.values()][index].visible && <Fragment key={index}>{img.dragComp}</Fragment>) }
                     </div>
+                    <br/>
+
                     <br/>
                 </div>
             </div>

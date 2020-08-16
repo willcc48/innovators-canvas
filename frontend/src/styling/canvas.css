@@ -28,6 +28,19 @@
     box-sizing: border-box;
 }
 
+.section__mobile:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.section__mobile__nohover {
+    width: 75vw;
+    height: 70vh;
+    overflow: hidden;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
 .canvas__top {
     width:90vw;
     height: 30vh;
