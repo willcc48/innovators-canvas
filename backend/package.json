@@ -16,7 +16,7 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "ejs": "~2.6.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-session": "^1.17.1",
     "fetch": "^1.1.0",
     "fotology": "^1.2.2",
